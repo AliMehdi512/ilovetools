@@ -2,10 +2,10 @@
 AI & Machine Learning utilities module
 """
 
-from .llm_helpers import *
+from .llm_helpers import token_counter
 from .embeddings import *
 from .inference import *
 
 __all__ = [
-    # Will be populated as functions are added
+    'token_counter',
 ]
