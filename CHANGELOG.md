@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2025-11-17
+
+### Added
+- **Data Module**: Complete Feature Engineering toolkit with 7 powerful functions
+  - `create_polynomial_features()` - Generate polynomial features (x, x^2, x^3) for non-linear relationships
+  - `bin_numerical_feature()` - Convert continuous data into categorical bins/groups
+  - `one_hot_encode()` - One-hot encoding for categorical variables
+  - `label_encode()` - Label encoding for ordinal categories
+  - `extract_datetime_features()` - Extract temporal features (hour, day, month, is_weekend) from timestamps
+  - `handle_missing_values()` - Multiple strategies for missing data (mean, median, forward/backward fill)
+  - `create_interaction_features()` - Create feature interactions (multiply, add, subtract, divide)
+  - All functions work without external ML libraries
+  - Comprehensive documentation with real-world examples
+  - Perfect for ML preprocessing pipelines
+
 ## [0.1.2] - 2025-11-16
 
 ### Added
