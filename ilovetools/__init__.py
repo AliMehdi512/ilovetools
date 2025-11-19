@@ -2,13 +2,14 @@
 ilovetools - A comprehensive Python utility library
 """
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "Ali Mehdi"
 __email__ = "ali.mehdi.dev579@gmail.com"
 
 # Import all modules for easy access
 from . import ai
 from . import data
+from . import ml
 from . import files
 from . import text
 from . import image
@@ -25,6 +26,7 @@ from . import utils
 __all__ = [
     "ai",
     "data",
+    "ml",
     "files",
     "text",
     "image",
