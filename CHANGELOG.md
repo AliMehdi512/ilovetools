@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2025-11-18
+
+### Added
+- **NEW ML Module**: Complete Model Evaluation Metrics toolkit with 11 essential functions
+  - `accuracy_score()` - Calculate classification accuracy
+  - `precision_score()` - Measure precision (avoid false positives)
+  - `recall_score()` - Measure recall/sensitivity (avoid false negatives)
+  - `f1_score()` - Harmonic mean of precision and recall
+  - `confusion_matrix()` - Generate confusion matrix for classification
+  - `classification_report()` - Comprehensive classification metrics report
+  - `mean_squared_error()` - MSE for regression problems
+  - `mean_absolute_error()` - MAE for regression problems
+  - `root_mean_squared_error()` - RMSE for regression problems
+  - `r2_score()` - R-squared coefficient of determination
+  - `roc_auc_score()` - ROC AUC score for binary classification
+  - No scikit-learn required for basic metrics
+  - Perfect for model evaluation without heavy dependencies
+  - Comprehensive documentation with real-world examples
+
 ## [0.1.3] - 2025-11-17
 
 ### Added
