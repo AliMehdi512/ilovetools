@@ -5,6 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2025-11-20
+
+### Added
+- **DUAL-NAME ALIAS SYSTEM**: Every function now has TWO names!
+  - Full descriptive name (e.g., `k_fold_cross_validation`)
+  - Abbreviated alias (e.g., `kfold`)
+  - Use whichever style you prefer - both work identically!
+
+- **ML Module - Cross-Validation**: 8 powerful CV functions (16 names total with aliases)
+  - `k_fold_cross_validation()` / `kfold()` - Standard K-fold CV
+  - `stratified_k_fold()` / `skfold()` - Stratified K-fold for imbalanced data
+  - `time_series_split()` / `tssplit()` - Time series CV (no data leakage)
+  - `leave_one_out_cv()` / `loocv()` - Leave-one-out CV
+  - `shuffle_split_cv()` / `shuffle_cv()` - Random shuffle split
+  - `cross_validate_score()` / `cv_score()` - Automated CV scoring
+  - `holdout_validation_split()` / `holdout()` - Simple train/test split
+  - `train_val_test_split()` / `tvt_split()` - Three-way split
+
+- **ML Module - Hyperparameter Tuning**: 10 tuning functions (20 names total with aliases)
+  - `grid_search_cv()` / `gridsearch()` - Exhaustive grid search
+  - `random_search_cv()` / `randomsearch()` - Random parameter search
+  - `bayesian_search_simple()` / `bayesopt()` - Bayesian optimization
+  - `generate_param_grid()` / `param_grid()` - Generate parameter grids
+  - `extract_best_params()` / `best_params()` - Extract best parameters
+  - `format_cv_results()` / `cv_results()` - Format CV results
+  - `learning_curve_data()` / `learning_curve()` - Learning curve analysis
+  - `validation_curve_data()` / `val_curve()` - Validation curve analysis
+  - `early_stopping_monitor()` / `early_stop()` - Early stopping utility
+  - `compare_models_cv()` / `compare_models()` - Compare multiple models
+
+- **ML Module - Metric Aliases**: Added short aliases for regression metrics
+  - `mean_absolute_error()` / `mae()`
+  - `mean_squared_error()` / `mse()`
+  - `root_mean_squared_error()` / `rmse()`
+
+### Changed
+- All ML functions now support dual-name system
+- Documentation updated to show both naming styles
+- Examples demonstrate both full and abbreviated names
+
+### Notes
+- **18 NEW functions** (36 names with aliases!)
+- Total ML functions: 29 (58 names with aliases!)
+- No breaking changes - all existing code works
+- Choose your preferred naming style
+
 ## [0.1.4] - 2025-11-18
 
 ### Added
