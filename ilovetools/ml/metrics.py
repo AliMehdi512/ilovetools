@@ -16,7 +16,11 @@ __all__ = [
     'mean_absolute_error',
     'root_mean_squared_error',
     'r2_score',
-    'roc_auc_score'
+    'roc_auc_score',
+    # Aliases
+    'mse',
+    'mae',
+    'rmse',
 ]
 
 
@@ -331,6 +335,8 @@ def mean_squared_error(y_true: List[float], y_pred: List[float]) -> float:
     """
     Calculate Mean Squared Error for regression.
     
+    Alias: mse()
+    
     MSE = Average of (actual - predicted)^2
     
     Args:
@@ -341,25 +347,23 @@ def mean_squared_error(y_true: List[float], y_pred: List[float]) -> float:
         float: MSE value
     
     Examples:
-        >>> from ilovetools.ml import mean_squared_error
+        >>> from ilovetools.ml import mse  # Short alias
         
         # Perfect predictions
         >>> y_true = [1.0, 2.0, 3.0, 4.0]
         >>> y_pred = [1.0, 2.0, 3.0, 4.0]
-        >>> mean_squared_error(y_true, y_pred)
+        >>> mse(y_true, y_pred)
         0.0
         
         # With errors
         >>> y_true = [100, 200, 300, 400]
         >>> y_pred = [110, 190, 310, 390]
-        >>> mse = mean_squared_error(y_true, y_pred)
-        >>> print(f"MSE: {mse:.2f}")
+        >>> error = mse(y_true, y_pred)
+        >>> print(f"MSE: {error:.2f}")
         MSE: 100.00
         
-        # House price prediction
-        >>> actual_prices = [250000, 300000, 350000]
-        >>> predicted_prices = [245000, 310000, 340000]
-        >>> mse = mean_squared_error(actual_prices, predicted_prices)
+        >>> from ilovetools.ml import mean_squared_error  # Full name
+        >>> error = mean_squared_error(y_true, y_pred)
     
     Notes:
         - Penalizes large errors heavily
@@ -374,9 +378,15 @@ def mean_squared_error(y_true: List[float], y_pred: List[float]) -> float:
     return sum(squared_errors) / len(squared_errors)
 
 
+# Create alias
+mse = mean_squared_error
+
+
 def mean_absolute_error(y_true: List[float], y_pred: List[float]) -> float:
     """
     Calculate Mean Absolute Error for regression.
+    
+    Alias: mae()
     
     MAE = Average of |actual - predicted|
     
@@ -388,27 +398,23 @@ def mean_absolute_error(y_true: List[float], y_pred: List[float]) -> float:
         float: MAE value
     
     Examples:
-        >>> from ilovetools.ml import mean_absolute_error
+        >>> from ilovetools.ml import mae  # Short alias
         
         # Perfect predictions
         >>> y_true = [1.0, 2.0, 3.0, 4.0]
         >>> y_pred = [1.0, 2.0, 3.0, 4.0]
-        >>> mean_absolute_error(y_true, y_pred)
+        >>> mae(y_true, y_pred)
         0.0
         
         # With errors
         >>> y_true = [100, 200, 300, 400]
         >>> y_pred = [110, 190, 310, 390]
-        >>> mae = mean_absolute_error(y_true, y_pred)
-        >>> print(f"MAE: ${mae:.2f}")
+        >>> error = mae(y_true, y_pred)
+        >>> print(f"MAE: ${error:.2f}")
         MAE: $10.00
         
-        # House price prediction
-        >>> actual_prices = [250000, 300000, 350000]
-        >>> predicted_prices = [245000, 310000, 340000]
-        >>> mae = mean_absolute_error(actual_prices, predicted_prices)
-        >>> print(f"Average error: ${mae:,.0f}")
-        Average error: $8,333
+        >>> from ilovetools.ml import mean_absolute_error  # Full name
+        >>> error = mean_absolute_error(y_true, y_pred)
     
     Notes:
         - Easy to interpret
@@ -423,9 +429,15 @@ def mean_absolute_error(y_true: List[float], y_pred: List[float]) -> float:
     return sum(absolute_errors) / len(absolute_errors)
 
 
+# Create alias
+mae = mean_absolute_error
+
+
 def root_mean_squared_error(y_true: List[float], y_pred: List[float]) -> float:
     """
     Calculate Root Mean Squared Error for regression.
+    
+    Alias: rmse()
     
     RMSE = sqrt(MSE)
     
@@ -437,27 +449,23 @@ def root_mean_squared_error(y_true: List[float], y_pred: List[float]) -> float:
         float: RMSE value
     
     Examples:
-        >>> from ilovetools.ml import root_mean_squared_error
+        >>> from ilovetools.ml import rmse  # Short alias
         
         # Perfect predictions
         >>> y_true = [1.0, 2.0, 3.0, 4.0]
         >>> y_pred = [1.0, 2.0, 3.0, 4.0]
-        >>> root_mean_squared_error(y_true, y_pred)
+        >>> rmse(y_true, y_pred)
         0.0
         
         # With errors
         >>> y_true = [100, 200, 300, 400]
         >>> y_pred = [110, 190, 310, 390]
-        >>> rmse = root_mean_squared_error(y_true, y_pred)
-        >>> print(f"RMSE: {rmse:.2f}")
+        >>> error = rmse(y_true, y_pred)
+        >>> print(f"RMSE: {error:.2f}")
         RMSE: 10.00
         
-        # House price prediction
-        >>> actual_prices = [250000, 300000, 350000]
-        >>> predicted_prices = [245000, 310000, 340000]
-        >>> rmse = root_mean_squared_error(actual_prices, predicted_prices)
-        >>> print(f"RMSE: ${rmse:,.0f}")
-        RMSE: $8,165
+        >>> from ilovetools.ml import root_mean_squared_error  # Full name
+        >>> error = root_mean_squared_error(y_true, y_pred)
     
     Notes:
         - Most common regression metric
@@ -465,8 +473,12 @@ def root_mean_squared_error(y_true: List[float], y_pred: List[float]) -> float:
         - Penalizes large errors
         - Lower is better
     """
-    mse = mean_squared_error(y_true, y_pred)
-    return mse ** 0.5
+    mse_value = mean_squared_error(y_true, y_pred)
+    return mse_value ** 0.5
+
+
+# Create alias
+rmse = root_mean_squared_error
 
 
 def r2_score(y_true: List[float], y_pred: List[float]) -> float:
