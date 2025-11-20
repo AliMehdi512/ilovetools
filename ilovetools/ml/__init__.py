@@ -1,5 +1,6 @@
 """
 Machine Learning utilities module
+All functions have dual names: full descriptive name + abbreviated alias
 """
 
 from .metrics import (
@@ -13,10 +14,61 @@ from .metrics import (
     mean_absolute_error,
     root_mean_squared_error,
     r2_score,
-    roc_auc_score
+    roc_auc_score,
+    # Aliases
+    mae,
+    mse,
+    rmse,
+)
+
+from .cross_validation import (
+    # Full names
+    k_fold_cross_validation,
+    stratified_k_fold,
+    time_series_split,
+    leave_one_out_cv,
+    shuffle_split_cv,
+    cross_validate_score,
+    holdout_validation_split,
+    train_val_test_split,
+    # Abbreviated aliases
+    kfold,
+    skfold,
+    tssplit,
+    loocv,
+    shuffle_cv,
+    cv_score,
+    holdout,
+    tvt_split,
+)
+
+from .tuning import (
+    # Full names
+    grid_search_cv,
+    random_search_cv,
+    generate_param_grid,
+    extract_best_params,
+    format_cv_results,
+    learning_curve_data,
+    validation_curve_data,
+    early_stopping_monitor,
+    compare_models_cv,
+    bayesian_search_simple,
+    # Abbreviated aliases
+    gridsearch,
+    randomsearch,
+    param_grid,
+    best_params,
+    cv_results,
+    learning_curve,
+    val_curve,
+    early_stop,
+    compare_models,
+    bayesopt,
 )
 
 __all__ = [
+    # Metrics (full names)
     'accuracy_score',
     'precision_score',
     'recall_score',
@@ -28,4 +80,48 @@ __all__ = [
     'root_mean_squared_error',
     'r2_score',
     'roc_auc_score',
+    # Metrics (aliases)
+    'mae',
+    'mse',
+    'rmse',
+    # Cross-validation (full names)
+    'k_fold_cross_validation',
+    'stratified_k_fold',
+    'time_series_split',
+    'leave_one_out_cv',
+    'shuffle_split_cv',
+    'cross_validate_score',
+    'holdout_validation_split',
+    'train_val_test_split',
+    # Cross-validation (aliases)
+    'kfold',
+    'skfold',
+    'tssplit',
+    'loocv',
+    'shuffle_cv',
+    'cv_score',
+    'holdout',
+    'tvt_split',
+    # Tuning (full names)
+    'grid_search_cv',
+    'random_search_cv',
+    'generate_param_grid',
+    'extract_best_params',
+    'format_cv_results',
+    'learning_curve_data',
+    'validation_curve_data',
+    'early_stopping_monitor',
+    'compare_models_cv',
+    'bayesian_search_simple',
+    # Tuning (aliases)
+    'gridsearch',
+    'randomsearch',
+    'param_grid',
+    'best_params',
+    'cv_results',
+    'learning_curve',
+    'val_curve',
+    'early_stop',
+    'compare_models',
+    'bayesopt',
 ]
