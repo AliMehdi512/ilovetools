@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.1.5",
+    version="0.1.6",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
