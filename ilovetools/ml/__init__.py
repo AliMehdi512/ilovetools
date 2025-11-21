@@ -67,6 +67,35 @@ from .tuning import (
     bayesopt,
 )
 
+from .ensemble import (
+    # Full names
+    voting_classifier,
+    voting_regressor,
+    bagging_predictions,
+    boosting_sequential,
+    stacking_ensemble,
+    weighted_average_ensemble,
+    majority_vote,
+    soft_vote,
+    bootstrap_sample,
+    out_of_bag_score,
+    ensemble_diversity,
+    blend_predictions,
+    # Abbreviated aliases
+    vote_clf,
+    vote_reg,
+    bagging,
+    boosting,
+    stacking,
+    weighted_avg,
+    hard_vote,
+    soft_vote_alias,
+    bootstrap,
+    oob_score,
+    diversity,
+    blend,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -124,4 +153,30 @@ __all__ = [
     'early_stop',
     'compare_models',
     'bayesopt',
+    # Ensemble (full names)
+    'voting_classifier',
+    'voting_regressor',
+    'bagging_predictions',
+    'boosting_sequential',
+    'stacking_ensemble',
+    'weighted_average_ensemble',
+    'majority_vote',
+    'soft_vote',
+    'bootstrap_sample',
+    'out_of_bag_score',
+    'ensemble_diversity',
+    'blend_predictions',
+    # Ensemble (aliases)
+    'vote_clf',
+    'vote_reg',
+    'bagging',
+    'boosting',
+    'stacking',
+    'weighted_avg',
+    'hard_vote',
+    'soft_vote_alias',
+    'bootstrap',
+    'oob_score',
+    'diversity',
+    'blend',
 ]
