@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2025-11-21
+
+### Added
+- **ML Module - Ensemble Methods**: 12 powerful ensemble functions (24 names with aliases)
+  - `voting_classifier()` / `vote_clf()` - Combine classifiers with voting
+  - `voting_regressor()` / `vote_reg()` - Combine regressors with averaging
+  - `bagging_predictions()` / `bagging()` - Bootstrap aggregating ensemble
+  - `boosting_sequential()` / `boosting()` - Sequential boosting ensemble
+  - `stacking_ensemble()` / `stacking()` - Stacking with meta-model
+  - `weighted_average_ensemble()` / `weighted_avg()` - Weighted predictions
+  - `majority_vote()` / `hard_vote()` - Hard voting for classification
+  - `soft_vote()` / `soft_vote_alias()` - Soft voting with probabilities
+  - `bootstrap_sample()` / `bootstrap()` - Create bootstrap samples
+  - `out_of_bag_score()` / `oob_score()` - OOB validation score
+  - `ensemble_diversity()` / `diversity()` - Measure model diversity
+  - `blend_predictions()` / `blend()` - Blend predictions with holdout
+
+### Notes
+- **12 NEW functions** (24 names with aliases!)
+- Total ML functions: 41 (82 names with aliases!)
+- Implements bagging, boosting, and stacking
+- All functions follow dual-name alias system
+- No breaking changes
+
 ## [0.1.5] - 2025-11-20
 
 ### Added
