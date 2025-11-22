@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.7] - 2025-11-22
+
+### Added
+- **ML Module - Feature Selection**: 12 powerful feature selection functions (24 names with aliases)
+  - `correlation_filter()` / `corr_filter()` - Remove highly correlated features
+  - `variance_threshold_filter()` / `var_filter()` - Remove low-variance features
+  - `chi_square_filter()` / `chi2_filter()` - Chi-square test for categorical features
+  - `mutual_information_filter()` / `mi_filter()` - Mutual information scoring
+  - `recursive_feature_elimination()` / `rfe()` - RFE wrapper method
+  - `forward_feature_selection()` / `forward_select()` - Forward selection
+  - `backward_feature_elimination()` / `backward_select()` - Backward elimination
+  - `feature_importance_ranking()` / `feat_importance()` - Rank by importance scores
+  - `l1_feature_selection()` / `l1_select()` - L1 regularization (Lasso)
+  - `univariate_feature_selection()` / `univariate_select()` - Univariate tests
+  - `select_k_best_features()` / `select_k_best()` - Automatic k-best selection
+  - `remove_correlated_features()` / `remove_corr()` - Remove correlations with details
+
+### Notes
+- **12 NEW functions** (24 names with aliases!)
+- Total ML functions: 53 (106 names with aliases!)
+- Implements filter, wrapper, and embedded methods
+- All functions follow dual-name alias system
+- No breaking changes
+
 ## [0.1.6] - 2025-11-21
 
 ### Added
