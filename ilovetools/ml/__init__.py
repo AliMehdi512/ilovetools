@@ -96,6 +96,35 @@ from .ensemble import (
     blend,
 )
 
+from .feature_selection import (
+    # Full names
+    correlation_filter,
+    variance_threshold_filter,
+    chi_square_filter,
+    mutual_information_filter,
+    recursive_feature_elimination,
+    forward_feature_selection,
+    backward_feature_elimination,
+    feature_importance_ranking,
+    l1_feature_selection,
+    univariate_feature_selection,
+    select_k_best_features,
+    remove_correlated_features,
+    # Abbreviated aliases
+    corr_filter,
+    var_filter,
+    chi2_filter,
+    mi_filter,
+    rfe,
+    forward_select,
+    backward_select,
+    feat_importance,
+    l1_select,
+    univariate_select,
+    select_k_best,
+    remove_corr,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -179,4 +208,30 @@ __all__ = [
     'oob_score',
     'diversity',
     'blend',
+    # Feature Selection (full names)
+    'correlation_filter',
+    'variance_threshold_filter',
+    'chi_square_filter',
+    'mutual_information_filter',
+    'recursive_feature_elimination',
+    'forward_feature_selection',
+    'backward_feature_elimination',
+    'feature_importance_ranking',
+    'l1_feature_selection',
+    'univariate_feature_selection',
+    'select_k_best_features',
+    'remove_correlated_features',
+    # Feature Selection (aliases)
+    'corr_filter',
+    'var_filter',
+    'chi2_filter',
+    'mi_filter',
+    'rfe',
+    'forward_select',
+    'backward_select',
+    'feat_importance',
+    'l1_select',
+    'univariate_select',
+    'select_k_best',
+    'remove_corr',
 ]
