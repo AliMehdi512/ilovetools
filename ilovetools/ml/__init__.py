@@ -125,6 +125,35 @@ from .feature_selection import (
     remove_corr,
 )
 
+from .interpretation import (
+    # Full names
+    feature_importance_scores,
+    permutation_importance,
+    partial_dependence,
+    shap_values_approximation,
+    lime_explanation,
+    decision_path_explanation,
+    model_coefficients_interpretation,
+    prediction_breakdown,
+    feature_contribution_analysis,
+    global_feature_importance,
+    local_feature_importance,
+    model_summary_statistics,
+    # Abbreviated aliases
+    feat_importance_scores,
+    perm_importance,
+    pdp,
+    shap_approx,
+    lime_explain,
+    decision_path,
+    coef_interpret,
+    pred_breakdown,
+    feat_contrib,
+    global_importance,
+    local_importance,
+    model_summary,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -234,4 +263,30 @@ __all__ = [
     'univariate_select',
     'select_k_best',
     'remove_corr',
+    # Interpretation (full names)
+    'feature_importance_scores',
+    'permutation_importance',
+    'partial_dependence',
+    'shap_values_approximation',
+    'lime_explanation',
+    'decision_path_explanation',
+    'model_coefficients_interpretation',
+    'prediction_breakdown',
+    'feature_contribution_analysis',
+    'global_feature_importance',
+    'local_feature_importance',
+    'model_summary_statistics',
+    # Interpretation (aliases)
+    'feat_importance_scores',
+    'perm_importance',
+    'pdp',
+    'shap_approx',
+    'lime_explain',
+    'decision_path',
+    'coef_interpret',
+    'pred_breakdown',
+    'feat_contrib',
+    'global_importance',
+    'local_importance',
+    'model_summary',
 ]
