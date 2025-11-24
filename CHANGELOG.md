@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.8] - 2025-11-23
+
+### Added
+- **ML Module - Model Interpretation**: 12 powerful interpretation functions (24 names with aliases)
+  - `feature_importance_scores()` / `feat_importance_scores()` - Format importance scores
+  - `permutation_importance()` / `perm_importance()` - Permutation-based importance
+  - `partial_dependence()` / `pdp()` - Partial dependence plots
+  - `shap_values_approximation()` / `shap_approx()` - SHAP value approximation
+  - `lime_explanation()` / `lime_explain()` - LIME local explanations
+  - `decision_path_explanation()` / `decision_path()` - Decision tree path
+  - `model_coefficients_interpretation()` / `coef_interpret()` - Linear model coefficients
+  - `prediction_breakdown()` / `pred_breakdown()` - Break down predictions
+  - `feature_contribution_analysis()` / `feat_contrib()` - Contribution analysis
+  - `global_feature_importance()` / `global_importance()` - Global importance ranking
+  - `local_feature_importance()` / `local_importance()` - Local importance for instances
+  - `model_summary_statistics()` / `model_summary()` - Model summary stats
+
+### Notes
+- **12 NEW functions** (24 names with aliases!)
+- Total ML functions: 65 (130 names with aliases!)
+- Implements SHAP, LIME, permutation importance, PDP
+- All functions follow dual-name alias system
+- No breaking changes
+
 ## [0.1.7] - 2025-11-22
 
 ### Added
