@@ -154,6 +154,35 @@ from .interpretation import (
     model_summary,
 )
 
+from .pipeline import (
+    # Full names
+    create_pipeline,
+    add_pipeline_step,
+    execute_pipeline,
+    validate_pipeline,
+    serialize_pipeline,
+    deserialize_pipeline,
+    pipeline_transform,
+    pipeline_fit_transform,
+    get_pipeline_params,
+    set_pipeline_params,
+    clone_pipeline,
+    pipeline_summary,
+    # Abbreviated aliases
+    create_pipe,
+    add_step,
+    execute_pipe,
+    validate_pipe,
+    serialize_pipe,
+    deserialize_pipe,
+    pipe_transform,
+    pipe_fit_transform,
+    get_params,
+    set_params,
+    clone_pipe,
+    pipe_summary,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -289,4 +318,30 @@ __all__ = [
     'global_importance',
     'local_importance',
     'model_summary',
+    # Pipeline (full names)
+    'create_pipeline',
+    'add_pipeline_step',
+    'execute_pipeline',
+    'validate_pipeline',
+    'serialize_pipeline',
+    'deserialize_pipeline',
+    'pipeline_transform',
+    'pipeline_fit_transform',
+    'get_pipeline_params',
+    'set_pipeline_params',
+    'clone_pipeline',
+    'pipeline_summary',
+    # Pipeline (aliases)
+    'create_pipe',
+    'add_step',
+    'execute_pipe',
+    'validate_pipe',
+    'serialize_pipe',
+    'deserialize_pipe',
+    'pipe_transform',
+    'pipe_fit_transform',
+    'get_params',
+    'set_params',
+    'clone_pipe',
+    'pipe_summary',
 ]
