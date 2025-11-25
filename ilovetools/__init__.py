@@ -2,7 +2,7 @@
 ilovetools - A comprehensive Python utility library
 """
 
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 __author__ = "Ali Mehdi"
 __email__ = "ali.mehdi.dev579@gmail.com"
 
