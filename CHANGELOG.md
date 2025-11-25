@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.9] - 2025-11-25
+
+### Added
+- **ML Module - Pipeline Utilities**: 12 powerful pipeline functions (24 names with aliases)
+  - `create_pipeline()` / `create_pipe()` - Create new ML pipeline
+  - `add_pipeline_step()` / `add_step()` - Add step to pipeline
+  - `execute_pipeline()` / `execute_pipe()` - Execute pipeline on data
+  - `validate_pipeline()` / `validate_pipe()` - Validate pipeline structure
+  - `serialize_pipeline()` / `serialize_pipe()` - Serialize to JSON
+  - `deserialize_pipeline()` / `deserialize_pipe()` - Deserialize from JSON
+  - `pipeline_transform()` / `pipe_transform()` - Transform with fitted pipeline
+  - `pipeline_fit_transform()` / `pipe_fit_transform()` - Fit and transform
+  - `get_pipeline_params()` / `get_params()` - Get all parameters
+  - `set_pipeline_params()` / `set_params()` - Set parameters
+  - `clone_pipeline()` / `clone_pipe()` - Clone pipeline
+  - `pipeline_summary()` / `pipe_summary()` - Get summary statistics
+
+### Notes
+- **12 NEW functions** (24 names with aliases!)
+- Total ML functions: 77 (154 names with aliases!)
+- Implements pipeline creation, execution, serialization
+- All functions follow dual-name alias system
+- No breaking changes
+
 ## [0.1.8] - 2025-11-23
 
 ### Added
