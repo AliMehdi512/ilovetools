@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-11-26
+
+### Added
+- **ML Module - Imbalanced Data Handling**: 12 powerful imbalanced data functions (24 names with aliases)
+  - `random_oversampling()` / `random_oversample()` - Random oversampling
+  - `random_undersampling()` / `random_undersample()` - Random undersampling
+  - `smote_oversampling()` / `smote()` - SMOTE synthetic sampling
+  - `tomek_links_undersampling()` / `tomek_links()` - Tomek links cleaning
+  - `class_weight_calculator()` / `class_weights()` - Calculate class weights
+  - `stratified_sampling()` / `stratified_sample()` - Stratified sampling
+  - `compute_class_distribution()` / `class_dist()` - Class distribution stats
+  - `balance_dataset()` / `balance_data()` - Unified balancing interface
+  - `minority_class_identifier()` / `minority_class()` - Identify minority class
+  - `imbalance_ratio()` / `imbalance_ratio_alias()` - Calculate imbalance ratio
+  - `synthetic_sample_generator()` / `synthetic_sample()` - Generate synthetic samples
+  - `near_miss_undersampling()` / `near_miss()` - NearMiss undersampling
+
+### Notes
+- **12 NEW functions** (24 names with aliases!)
+- Total ML functions: 89 (178 names with aliases!)
+- Implements SMOTE, Tomek links, NearMiss, class weights
+- All functions follow dual-name alias system
+- No breaking changes
+- Major version bump to 0.2.0
+
 ## [0.1.9] - 2025-11-25
 
 ### Added
