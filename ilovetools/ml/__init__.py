@@ -183,6 +183,35 @@ from .pipeline import (
     pipe_summary,
 )
 
+from .imbalanced import (
+    # Full names
+    random_oversampling,
+    random_undersampling,
+    smote_oversampling,
+    tomek_links_undersampling,
+    class_weight_calculator,
+    stratified_sampling,
+    compute_class_distribution,
+    balance_dataset,
+    minority_class_identifier,
+    imbalance_ratio,
+    synthetic_sample_generator,
+    near_miss_undersampling,
+    # Abbreviated aliases
+    random_oversample,
+    random_undersample,
+    smote,
+    tomek_links,
+    class_weights,
+    stratified_sample,
+    class_dist,
+    balance_data,
+    minority_class,
+    imbalance_ratio_alias,
+    synthetic_sample,
+    near_miss,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -344,4 +373,30 @@ __all__ = [
     'set_params',
     'clone_pipe',
     'pipe_summary',
+    # Imbalanced (full names)
+    'random_oversampling',
+    'random_undersampling',
+    'smote_oversampling',
+    'tomek_links_undersampling',
+    'class_weight_calculator',
+    'stratified_sampling',
+    'compute_class_distribution',
+    'balance_dataset',
+    'minority_class_identifier',
+    'imbalance_ratio',
+    'synthetic_sample_generator',
+    'near_miss_undersampling',
+    # Imbalanced (aliases)
+    'random_oversample',
+    'random_undersample',
+    'smote',
+    'tomek_links',
+    'class_weights',
+    'stratified_sample',
+    'class_dist',
+    'balance_data',
+    'minority_class',
+    'imbalance_ratio_alias',
+    'synthetic_sample',
+    'near_miss',
 ]
