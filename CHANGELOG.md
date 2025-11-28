@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2025-11-28
+
+### Added
+- **ML Module - Dimensionality Reduction**: 15 powerful dimensionality reduction functions (30 names with aliases)
+  - `pca_transform()` / `pca()` - Principal Component Analysis
+  - `explained_variance_ratio()` / `exp_var()` - Explained variance ratios
+  - `scree_plot_data()` / `scree_plot()` - Scree plot data generation
+  - `cumulative_variance()` / `cum_var()` - Cumulative variance calculation
+  - `pca_inverse_transform()` / `pca_inverse()` - Inverse PCA transformation
+  - `truncated_svd()` / `svd()` - Truncated SVD decomposition
+  - `kernel_pca_transform()` / `kpca()` - Kernel PCA (non-linear)
+  - `incremental_pca_transform()` / `ipca()` - Incremental PCA for large datasets
+  - `feature_projection()` / `project()` - Generic feature projection
+  - `dimensionality_reduction_ratio()` / `dim_ratio()` - Reduction ratio calculation
+  - `reconstruction_error()` / `recon_error()` - Reconstruction error metrics
+  - `optimal_components()` / `opt_components()` - Find optimal number of components
+  - `whitening_transform()` / `whiten()` - Whitening transformation
+  - `component_loadings()` / `loadings()` - Component loading calculation
+  - `biplot_data()` / `biplot()` - Biplot data generation
+
+### Notes
+- **15 NEW functions** (30 names with aliases!)
+- Total ML functions: 104 (208 names with aliases!)
+- Implements PCA, SVD, Kernel PCA, Incremental PCA
+- All functions follow dual-name alias system
+- No breaking changes
+
 ## [0.2.0] - 2025-11-26
 
 ### Added
