@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2025-11-29
+
+### Added
+- **ML Module - Time Series Analysis**: 15 powerful time series functions (30 names with aliases)
+  - `moving_average()` / `ma()` - Simple Moving Average (SMA)
+  - `exponential_moving_average()` / `ema()` - Exponential Moving Average
+  - `weighted_moving_average()` / `wma()` - Weighted Moving Average
+  - `seasonal_decompose()` / `decompose()` - Seasonal decomposition
+  - `difference_series()` / `diff()` - Differencing for stationarity
+  - `autocorrelation()` / `acf()` - Autocorrelation function
+  - `partial_autocorrelation()` / `pacf()` - Partial autocorrelation
+  - `detect_trend()` / `trend()` - Trend detection
+  - `detect_seasonality()` / `seasonality()` - Seasonality detection
+  - `remove_trend()` / `detrend()` - Remove trend
+  - `remove_seasonality()` / `deseasonalize()` - Remove seasonality
+  - `rolling_statistics()` / `rolling_stats()` - Rolling statistics
+  - `lag_features()` / `lag()` - Create lag features
+  - `time_series_split_cv()` / `ts_cv()` - Time series cross-validation
+  - `forecast_accuracy()` / `forecast_acc()` - Forecast accuracy metrics
+
+### Notes
+- **15 NEW functions** (30 names with aliases!)
+- Total ML functions: 119 (238 names with aliases!)
+- Implements moving averages, seasonal decomposition, ACF/PACF, trend/seasonality detection
+- All functions follow dual-name alias system
+- No breaking changes
+
 ## [0.2.1] - 2025-11-28
 
 ### Added
