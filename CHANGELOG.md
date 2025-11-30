@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2025-11-30
+
+### Added
+- **ML Module - Clustering Algorithms**: 15 powerful clustering functions (30 names with aliases)
+  - `kmeans_clustering()` / `kmeans()` - K-Means clustering algorithm
+  - `hierarchical_clustering()` / `hierarchical()` - Hierarchical agglomerative clustering
+  - `dbscan_clustering()` / `dbscan()` - DBSCAN density-based clustering
+  - `elbow_method()` / `elbow()` - Find optimal K using elbow method
+  - `silhouette_score()` / `silhouette()` - Calculate silhouette score
+  - `euclidean_distance()` / `euclidean()` - Euclidean distance metric
+  - `manhattan_distance()` / `manhattan()` - Manhattan distance metric
+  - `cosine_similarity_distance()` / `cosine_dist()` - Cosine distance metric
+  - `initialize_centroids()` / `init_centroids()` - Initialize cluster centroids
+  - `assign_clusters()` / `assign()` - Assign points to clusters
+  - `update_centroids()` / `update()` - Update cluster centroids
+  - `calculate_inertia()` / `inertia()` - Calculate within-cluster sum of squares
+  - `dendrogram_data()` / `dendrogram()` - Generate dendrogram data
+  - `cluster_purity()` / `purity()` - Calculate cluster purity score
+  - `davies_bouldin_index()` / `davies_bouldin()` - Davies-Bouldin index
+
+### Notes
+- **15 NEW functions** (30 names with aliases!)
+- Total ML functions: 134 (268 names with aliases!)
+- Implements K-Means, Hierarchical, DBSCAN clustering
+- Distance metrics: Euclidean, Manhattan, Cosine
+- Cluster validation: Silhouette, Elbow, Davies-Bouldin, Purity
+- All functions follow dual-name alias system
+- No breaking changes
+
 ## [0.2.2] - 2025-11-29
 
 ### Added
