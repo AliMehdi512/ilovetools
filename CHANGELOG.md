@@ -33,6 +33,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Notes
 - Release created to get a successful publish after filename-reuse blocks prevented re-uploading previous artifact names.
 
+## [0.2.9.post1] - 2025-12-10
+
+### Fixed
+- Publish as a PEP 440 post-release `0.2.9.post1` to generate a unique artifact filename and avoid PyPI's filename/hash reuse protection.
+
+### Notes
+- `pyproject.toml` is now the authoritative source for dependency metadata; `setup.py` no longer contains `install_requires`/`extras_require` to avoid build-time warnings.
+
 ## [0.2.6] - 2025-12-10
 
 ### Fixed
