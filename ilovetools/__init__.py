@@ -2,7 +2,8 @@
 ilovetools - A comprehensive Python utility library
 """
 
-__version__ = "0.2.9.post2"
+__version__ = "0.2.9.post3"
+# release marker: post3 (tiny, harmless change to alter build artifact hash for PyPI upload)
 __author__ = "Ali Mehdi"
 __email__ = "ali.mehdi.dev579@gmail.com"
 
