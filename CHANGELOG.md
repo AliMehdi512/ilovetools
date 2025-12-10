@@ -25,6 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Notes
 - Release created to unblock publishing; see 0.2.4 for packaging fixes and metadata synchronization.
 
+## [0.2.9] - 2025-12-10
+
+### Fixed
+- Bumped package version to 0.2.9 to avoid PyPI filename/hash reuse protection and successfully publish corrected artifacts.
+
+### Notes
+- Release created to get a successful publish after filename-reuse blocks prevented re-uploading previous artifact names.
+
 ## [0.2.6] - 2025-12-10
 
 ### Fixed
