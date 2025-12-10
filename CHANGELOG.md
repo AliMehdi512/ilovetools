@@ -5,23 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.8] - 2025-12-10
+## [0.2.4] - 2025-12-10
 
-### Fixed / Released
-- Bumped package version to 0.2.8 after repeated PyPI filename-reuse errors prevented uploading 0.2.6/0.2.7 artifacts.
-- Synchronized packaging metadata and republished from CI.
+### Fixed
+- Corrected packaging metadata and synchronized versions across `setup.py`, `pyproject.toml`, and `ilovetools/__init__.py` so builds and CI produce consistent artifacts.
+- Fixed deprecated/incorrect metadata fields in `pyproject.toml` (license/metadata formatting) to satisfy modern build tools.
 
-### Notes
-- No code changes; release is a packaging metadata republish to satisfy PyPI filename uniqueness.
-
-## [0.2.7] - 2025-12-10
-
-### Fixed / Released
-- Republished package with a version bump after PyPI rejected a re-upload of the 0.2.6 artifact due to filename reuse policy.
-- Updated metadata and synchronized versions across packaging files (setup.py, pyproject.toml, ilovetools/__init__.py).
+### Changed
+- Updated project metadata and dependency lists for consistent installation behavior.
 
 ### Notes
-- This release was intended to avoid PyPI's filename-reuse restriction but CI still reported a duplicate filename; bumped again to 0.2.8.
+- This release (0.2.4) is intended to follow the published 0.2.3 release on PyPI and correct packaging issues that prevented a reliable publish.
 
 ## [0.2.6] - 2025-12-10
 
