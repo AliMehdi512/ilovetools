@@ -1,0 +1,5 @@
+Build marker: 2025-12-10T14:45:00Z
+Commit: automated-release-0.2.11
+UUID: b5f9c2e4-3d1a-4a0d-9f2b-8f6c7d5e1a2b
+
+This file is included to ensure unique distribution contents for PyPI upload attempts.
