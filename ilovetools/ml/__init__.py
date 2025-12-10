@@ -317,6 +317,19 @@ from .clustering import (
     davies_bouldin,
 )
 
+from .anomaly_detection import (
+    # Full names
+    detect_zscore,
+    detect_iqr,
+    detect_isolation_forest,
+    detect_local_outlier_factor,
+    detect_dbscan,
+    detect_statistical,
+    remove_outliers,
+    get_outlier_scores,
+    visualize_anomalies,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -600,4 +613,14 @@ __all__ = [
     'dendrogram',
     'purity',
     'davies_bouldin',
+    # Anomaly Detection
+    'detect_zscore',
+    'detect_iqr',
+    'detect_isolation_forest',
+    'detect_local_outlier_factor',
+    'detect_dbscan',
+    'detect_statistical',
+    'remove_outliers',
+    'get_outlier_scores',
+    'visualize_anomalies',
 ]
