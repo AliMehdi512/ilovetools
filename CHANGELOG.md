@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.8] - 2025-12-10
+
+### Fixed / Released
+- Bumped package version to 0.2.8 after repeated PyPI filename-reuse errors prevented uploading 0.2.6/0.2.7 artifacts.
+- Synchronized packaging metadata and republished from CI.
+
+### Notes
+- No code changes; release is a packaging metadata republish to satisfy PyPI filename uniqueness.
+
 ## [0.2.7] - 2025-12-10
 
 ### Fixed / Released
@@ -12,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated metadata and synchronized versions across packaging files (setup.py, pyproject.toml, ilovetools/__init__.py).
 
 ### Notes
-- This release is primarily to avoid PyPI's filename-reuse restriction; there are no code changes beyond packaging metadata updates.
+- This release was intended to avoid PyPI's filename-reuse restriction but CI still reported a duplicate filename; bumped again to 0.2.8.
 
 ## [0.2.6] - 2025-12-10
 
