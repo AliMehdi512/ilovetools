@@ -8,6 +8,7 @@ on:
       - 'setup.py'
       - 'pyproject.toml'
       - 'ilovetools/**'
+  workflow_dispatch:  # Allows manual triggering from GitHub Actions tab
 
 jobs:
   publish:
@@ -29,8 +30,11 @@ jobs:
     - name: Build package
       run: python -m build
     
+    - name: Check package
+      run: twine check dist/*
+    
     - name: Publish to PyPI
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: twine upload dist/*
+      run: twine upload dist/* --verbose
