@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.2.11",
+    version="0.2.6",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
@@ -26,11 +26,38 @@ setup(
         "Programming Language :: Python :: 3.12",
     ],
     python_requires=">=3.8",
-    # Dependency metadata is maintained in pyproject.toml so setuptools'
-    # configuration reads the authoritative list from there. Removing
-    # `install_requires`/`extras_require` from setup.py avoids warnings
-    # about overwriting fields when building with modern build backends.
-    keywords="utilities, tools, ai, ml, data-processing, automation, python-library",
+    install_requires=[
+        "requests>=2.31.0",
+        "numpy>=1.24.0",
+        "pandas>=2.0.0",
+    ],
+    extras_require={
+        "ai": [
+            "openai>=1.0.0",
+            "transformers>=4.30.0",
+            "torch>=2.0.0",
+            "sentence-transformers>=2.2.0",
+        ],
+        "image": [
+            "Pillow>=10.0.0",
+            "opencv-python>=4.8.0",
+        ],
+        "audio": [
+            "librosa>=0.10.0",
+            "soundfile>=0.12.0",
+        ],
+        "all": [
+            "openai>=1.0.0",
+            "transformers>=4.30.0",
+            "torch>=2.0.0",
+            "sentence-transformers>=2.2.0",
+            "Pillow>=10.0.0",
+            "opencv-python>=4.8.0",
+            "librosa>=0.10.0",
+            "soundfile>=0.12.0",
+        ],
+    },
+    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks",
     project_urls={
         "Bug Reports": "https://github.com/AliMehdi512/ilovetools/issues",
         "Source": "https://github.com/AliMehdi512/ilovetools",
