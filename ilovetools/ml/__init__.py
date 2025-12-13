@@ -330,6 +330,48 @@ from .anomaly_detection import (
     visualize_anomalies,
 )
 
+from .neural_network import (
+    # Activation Functions
+    sigmoid,
+    relu,
+    leaky_relu,
+    tanh,
+    softmax,
+    elu,
+    swish,
+    # Activation Derivatives
+    sigmoid_derivative,
+    relu_derivative,
+    tanh_derivative,
+    # Loss Functions
+    mse_loss,
+    binary_crossentropy,
+    categorical_crossentropy,
+    huber_loss,
+    # Weight Initialization
+    xavier_init,
+    he_init,
+    random_init,
+    zeros_init,
+    ones_init,
+    # Layer Operations
+    dense_forward,
+    dense_backward,
+    dropout_forward,
+    batch_norm_forward,
+    # Optimization
+    sgd_update,
+    momentum_update,
+    adam_update,
+    rmsprop_update,
+    # Utilities
+    one_hot_encode,
+    shuffle_data,
+    mini_batch_generator,
+    calculate_accuracy,
+    confusion_matrix_nn,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -623,4 +665,43 @@ __all__ = [
     'remove_outliers',
     'get_outlier_scores',
     'visualize_anomalies',
+    # Neural Network - Activation Functions
+    'sigmoid',
+    'relu',
+    'leaky_relu',
+    'tanh',
+    'softmax',
+    'elu',
+    'swish',
+    # Neural Network - Activation Derivatives
+    'sigmoid_derivative',
+    'relu_derivative',
+    'tanh_derivative',
+    # Neural Network - Loss Functions
+    'mse_loss',
+    'binary_crossentropy',
+    'categorical_crossentropy',
+    'huber_loss',
+    # Neural Network - Weight Initialization
+    'xavier_init',
+    'he_init',
+    'random_init',
+    'zeros_init',
+    'ones_init',
+    # Neural Network - Layer Operations
+    'dense_forward',
+    'dense_backward',
+    'dropout_forward',
+    'batch_norm_forward',
+    # Neural Network - Optimization
+    'sgd_update',
+    'momentum_update',
+    'adam_update',
+    'rmsprop_update',
+    # Neural Network - Utilities
+    'one_hot_encode',
+    'shuffle_data',
+    'mini_batch_generator',
+    'calculate_accuracy',
+    'confusion_matrix_nn',
 ]
