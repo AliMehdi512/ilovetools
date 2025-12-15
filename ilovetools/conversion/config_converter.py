@@ -5,7 +5,7 @@ Convert between JSON, YAML, TOML, XML, and INI formats
 
 import json
 import re
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Union, Optional
 from collections import OrderedDict
 
 __all__ = [
