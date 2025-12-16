@@ -2,8 +2,8 @@
 ilovetools - A comprehensive Python utility library
 """
 
-__version__ = "0.2.11"
-# release marker: 0.2.11
+__version__ = "0.2.7.1"
+# release marker: 0.2.7.1
 __author__ = "Ali Mehdi"
 __email__ = "ali.mehdi.dev579@gmail.com"
 
