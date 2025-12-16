@@ -1,8 +1,8 @@
-# Release Notes - v0.2.7
+# Release Notes - v0.2.7.1
 
-**Release Date:** December 15, 2024
+**Release Date:** December 16, 2024
 
-## 🔧 Critical Fix
+## 🔧 Critical Patch Fix
 
 ### Fixed Optional Import Issue
 
@@ -21,7 +21,7 @@ from ilovetools.ml import sigmoid, relu, softmax  # ❌ Failed in v0.2.6
 # Before (v0.2.6)
 from typing import Any, Dict, List, Union
 
-# After (v0.2.7)
+# After (v0.2.7.1)
 from typing import Any, Dict, List, Union, Optional
 ```
 
@@ -31,7 +31,7 @@ from typing import Any, Dict, List, Union, Optional
 
 ### New Installation (Recommended)
 ```bash
-pip install ilovetools==0.2.7
+pip install ilovetools==0.2.7.1
 ```
 
 ### Upgrade from v0.2.6
@@ -71,12 +71,20 @@ All features from v0.2.6 are included:
 - **Tests:** https://github.com/AliMehdi512/ilovetools/blob/main/tests/test_neural_network.py
 - **Fix Commit:** https://github.com/AliMehdi512/ilovetools/commit/4dae40a23d811fbd5996fbb7eb87ffd1a45fc2c9
 
+## 📋 Version History
+
+- **v0.2.7.1** (Dec 16, 2024): ✅ Patch fix - Optional import corrected
+- **v0.2.7** (Dec 15, 2024): Version bump (skipped for patch versioning)
+- **v0.2.6** (Dec 15, 2024): ❌ Neural Network utilities added, but had import bug
+
 ## 🙏 Thank You
 
-Thank you for your patience! If you encountered the import error in v0.2.6, please upgrade to v0.2.7.
+Thank you for your patience! If you encountered the import error in v0.2.6, please upgrade to v0.2.7.1.
 
 ---
 
-**Previous Version Issues:**
-- v0.2.6: ❌ Missing Optional import (Fixed in v0.2.7)
-- v0.2.7: ✅ All imports working correctly
+**Semantic Versioning:**
+- Major.Minor.Patch format (0.2.7.x)
+- Patch increments (x) for bug fixes
+- Minor increments for new features
+- Major increments for breaking changes
