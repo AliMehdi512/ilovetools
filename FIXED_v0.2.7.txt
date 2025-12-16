@@ -1,6 +1,6 @@
-✅ FIXED IN v0.2.7
+✅ FIXED IN v0.2.7.1
 
-The Optional import issue has been PERMANENTLY FIXED in version 0.2.7.
+The Optional import issue has been PERMANENTLY FIXED in version 0.2.7.1.
 
 WHAT WAS FIXED:
 - Added "Optional" to typing imports in config_converter.py (line 8)
@@ -9,10 +9,17 @@ WHAT WAS FIXED:
 NO MORE MANUAL FIXES NEEDED!
 
 INSTALL:
+pip install ilovetools==0.2.7.1
+
+OR UPGRADE:
 pip install --upgrade ilovetools
 
 VERIFY:
 python -c "from ilovetools.ml import sigmoid, relu; print('✅ Working!')"
 
+VERSION INFO:
+- v0.2.7.1 = Patch fix for Optional import bug
+- v0.2.6 = Had the bug (upgrade required)
+
 Commit: 4dae40a23d811fbd5996fbb7eb87ffd1a45fc2c9
-Date: 2024-12-15
+Date: 2024-12-16
