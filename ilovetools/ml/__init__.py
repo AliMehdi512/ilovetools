@@ -372,6 +372,35 @@ from .neural_network import (
     confusion_matrix_nn,
 )
 
+from .gradient_descent import (
+    # Basic Gradient Descent
+    gradient_descent,
+    batch_gradient_descent,
+    stochastic_gradient_descent,
+    mini_batch_gradient_descent,
+    # Advanced Optimizers
+    momentum_optimizer,
+    nesterov_momentum,
+    adagrad_optimizer,
+    rmsprop_optimizer,
+    adam_optimizer,
+    adamw_optimizer,
+    nadam_optimizer,
+    adadelta_optimizer,
+    # Learning Rate Schedules
+    step_decay_schedule,
+    exponential_decay_schedule,
+    cosine_annealing_schedule,
+    linear_warmup_schedule,
+    polynomial_decay_schedule,
+    # Utilities
+    compute_gradient,
+    gradient_clipping,
+    check_convergence,
+    line_search,
+    compute_learning_rate,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -704,4 +733,30 @@ __all__ = [
     'mini_batch_generator',
     'calculate_accuracy',
     'confusion_matrix_nn',
+    # Gradient Descent - Basic
+    'gradient_descent',
+    'batch_gradient_descent',
+    'stochastic_gradient_descent',
+    'mini_batch_gradient_descent',
+    # Gradient Descent - Advanced Optimizers
+    'momentum_optimizer',
+    'nesterov_momentum',
+    'adagrad_optimizer',
+    'rmsprop_optimizer',
+    'adam_optimizer',
+    'adamw_optimizer',
+    'nadam_optimizer',
+    'adadelta_optimizer',
+    # Gradient Descent - Learning Rate Schedules
+    'step_decay_schedule',
+    'exponential_decay_schedule',
+    'cosine_annealing_schedule',
+    'linear_warmup_schedule',
+    'polynomial_decay_schedule',
+    # Gradient Descent - Utilities
+    'compute_gradient',
+    'gradient_clipping',
+    'check_convergence',
+    'line_search',
+    'compute_learning_rate',
 ]
