@@ -401,6 +401,30 @@ from .gradient_descent import (
     compute_learning_rate,
 )
 
+from .regularization import (
+    # L1/L2 Regularization
+    l1_regularization,
+    l2_regularization,
+    elastic_net_regularization,
+    l1_penalty,
+    l2_penalty,
+    elastic_net_penalty,
+    # Dropout
+    dropout,
+    dropout_mask,
+    inverted_dropout,
+    # Early Stopping
+    early_stopping_monitor as reg_early_stopping_monitor,
+    should_stop_early,
+    # Weight Constraints
+    max_norm_constraint,
+    unit_norm_constraint,
+    non_negative_constraint,
+    # Regularization Utilities
+    compute_regularization_loss,
+    apply_weight_decay,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -759,4 +783,25 @@ __all__ = [
     'check_convergence',
     'line_search',
     'compute_learning_rate',
+    # Regularization - L1/L2
+    'l1_regularization',
+    'l2_regularization',
+    'elastic_net_regularization',
+    'l1_penalty',
+    'l2_penalty',
+    'elastic_net_penalty',
+    # Regularization - Dropout
+    'dropout',
+    'dropout_mask',
+    'inverted_dropout',
+    # Regularization - Early Stopping
+    'reg_early_stopping_monitor',
+    'should_stop_early',
+    # Regularization - Weight Constraints
+    'max_norm_constraint',
+    'unit_norm_constraint',
+    'non_negative_constraint',
+    # Regularization - Utilities
+    'compute_regularization_loss',
+    'apply_weight_decay',
 ]
