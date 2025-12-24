@@ -347,7 +347,7 @@ from .neural_network import (
     mse_loss,
     binary_crossentropy,
     categorical_crossentropy,
-    huber_loss,
+    huber_loss as nn_huber_loss,
     # Weight Initialization
     xavier_init,
     he_init,
@@ -423,6 +423,35 @@ from .regularization import (
     # Regularization Utilities
     compute_regularization_loss,
     apply_weight_decay,
+)
+
+from .loss_functions import (
+    # Regression Losses
+    mean_squared_error_loss,
+    mean_absolute_error_loss,
+    root_mean_squared_error_loss,
+    huber_loss,
+    log_cosh_loss,
+    quantile_loss,
+    mean_squared_logarithmic_error,
+    # Classification Losses
+    binary_crossentropy_loss,
+    categorical_crossentropy_loss,
+    sparse_categorical_crossentropy_loss,
+    hinge_loss,
+    squared_hinge_loss,
+    categorical_hinge_loss,
+    focal_loss,
+    kullback_leibler_divergence,
+    # Segmentation Losses
+    dice_loss,
+    dice_coefficient,
+    iou_loss,
+    tversky_loss,
+    focal_tversky_loss,
+    # Utilities
+    combined_loss,
+    weighted_loss,
 )
 
 __all__ = [
@@ -734,7 +763,7 @@ __all__ = [
     'mse_loss',
     'binary_crossentropy',
     'categorical_crossentropy',
-    'huber_loss',
+    'nn_huber_loss',
     # Neural Network - Weight Initialization
     'xavier_init',
     'he_init',
@@ -804,4 +833,30 @@ __all__ = [
     # Regularization - Utilities
     'compute_regularization_loss',
     'apply_weight_decay',
+    # Loss Functions - Regression
+    'mean_squared_error_loss',
+    'mean_absolute_error_loss',
+    'root_mean_squared_error_loss',
+    'huber_loss',
+    'log_cosh_loss',
+    'quantile_loss',
+    'mean_squared_logarithmic_error',
+    # Loss Functions - Classification
+    'binary_crossentropy_loss',
+    'categorical_crossentropy_loss',
+    'sparse_categorical_crossentropy_loss',
+    'hinge_loss',
+    'squared_hinge_loss',
+    'categorical_hinge_loss',
+    'focal_loss',
+    'kullback_leibler_divergence',
+    # Loss Functions - Segmentation
+    'dice_loss',
+    'dice_coefficient',
+    'iou_loss',
+    'tversky_loss',
+    'focal_tversky_loss',
+    # Loss Functions - Utilities
+    'combined_loss',
+    'weighted_loss',
 ]
