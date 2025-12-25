@@ -454,6 +454,36 @@ from .loss_functions import (
     weighted_loss,
 )
 
+from .activations import (
+    # Basic Activations
+    sigmoid_activation,
+    tanh_activation,
+    relu_activation,
+    leaky_relu_activation,
+    elu_activation,
+    selu_activation,
+    gelu_activation,
+    swish_activation,
+    mish_activation,
+    softplus_activation,
+    softsign_activation,
+    hard_sigmoid_activation,
+    hard_tanh_activation,
+    softmax_activation,
+    log_softmax_activation,
+    # Derivatives
+    sigmoid_derivative as sigmoid_deriv,
+    tanh_derivative as tanh_deriv,
+    relu_derivative as relu_deriv,
+    leaky_relu_derivative,
+    elu_derivative,
+    swish_derivative,
+    softplus_derivative,
+    # Utilities
+    apply_activation,
+    get_activation_function,
+)
+
 __all__ = [
     # Metrics (full names)
     'accuracy_score',
@@ -859,4 +889,31 @@ __all__ = [
     # Loss Functions - Utilities
     'combined_loss',
     'weighted_loss',
+    # Activation Functions - Basic
+    'sigmoid_activation',
+    'tanh_activation',
+    'relu_activation',
+    'leaky_relu_activation',
+    'elu_activation',
+    'selu_activation',
+    'gelu_activation',
+    'swish_activation',
+    'mish_activation',
+    'softplus_activation',
+    'softsign_activation',
+    'hard_sigmoid_activation',
+    'hard_tanh_activation',
+    'softmax_activation',
+    'log_softmax_activation',
+    # Activation Functions - Derivatives
+    'sigmoid_deriv',
+    'tanh_deriv',
+    'relu_deriv',
+    'leaky_relu_derivative',
+    'elu_derivative',
+    'swish_derivative',
+    'softplus_derivative',
+    # Activation Functions - Utilities
+    'apply_activation',
+    'get_activation_function',
 ]
