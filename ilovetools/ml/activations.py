@@ -36,6 +36,23 @@ __all__ = [
     # Utilities
     'apply_activation',
     'get_activation_function',
+    
+    # Convenient aliases (without _activation suffix)
+    'sigmoid',
+    'tanh',
+    'relu',
+    'leaky_relu',
+    'elu',
+    'selu',
+    'gelu',
+    'swish',
+    'mish',
+    'softplus',
+    'softsign',
+    'hard_sigmoid',
+    'hard_tanh',
+    'softmax',
+    'log_softmax',
 ]
 
 
@@ -250,17 +267,15 @@ def gelu_activation(x: np.ndarray) -> np.ndarray:
     Gaussian Error Linear Unit (GELU) activation.
     
     GELU(x) = x × Φ(x)
-    
-    where Φ(x) is the cumulative distribution function of standard normal
+    where Φ(x) is the cumulative distribution function of the standard normal distribution
     
     Approximation: GELU(x) ≈ 0.5x(1 + tanh[√(2/π)(x + 0.044715x³)])
     
     Properties:
-    - Smooth
-    - Probabilistic interpretation
-    - State-of-the-art performance
-    - Used in BERT, GPT models
-    - Non-monotonic
+    - Smooth, non-monotonic
+    - Used in BERT, GPT
+    - Better than ReLU for Transformers
+    - Stochastic regularizer
     
     Args:
         x: Input array
@@ -275,7 +290,7 @@ def gelu_activation(x: np.ndarray) -> np.ndarray:
         >>> x = np.array([-2, -1, 0, 1, 2])
         >>> output = gelu_activation(x)
         >>> print(output)
-        [-0.0454 -0.1588  0.0000  0.8412  1.9545]
+        [-0.0454 -0.1588  0.0000  0.8412  1.9546]
     """
     return 0.5 * x * (1 + np.tanh(np.sqrt(2 / np.pi) * (x + 0.044715 * x**3)))
 
@@ -285,13 +300,12 @@ def swish_activation(
     beta: float = 1.0
 ) -> np.ndarray:
     """
-    Swish activation function (also called SiLU).
+    Swish activation function (also known as SiLU).
     
     Swish(x) = x × σ(βx)
     
     Properties:
-    - Smooth
-    - Non-monotonic
+    - Smooth, non-monotonic
     - Self-gated
     - Better than ReLU in deep networks
     - Used in EfficientNet
@@ -320,14 +334,12 @@ def mish_activation(x: np.ndarray) -> np.ndarray:
     Mish activation function.
     
     Mish(x) = x × tanh(softplus(x))
-           = x × tanh(ln(1 + e^x))
     
     Properties:
-    - Smooth
-    - Non-monotonic
+    - Smooth, non-monotonic
     - Self-regularizing
-    - Better generalization than ReLU
-    - Good for computer vision
+    - Better than ReLU and Swish in some cases
+    - Unbounded above, bounded below
     
     Args:
         x: Input array
@@ -344,20 +356,20 @@ def mish_activation(x: np.ndarray) -> np.ndarray:
         >>> print(output)
         [-0.2525 -0.3034  0.0000  0.8651  1.9440]
     """
-    return x * np.tanh(np.log(1 + np.exp(np.clip(x, -20, 20))))
+    return x * np.tanh(np.log(1 + np.exp(x)))
 
 
 def softplus_activation(x: np.ndarray) -> np.ndarray:
     """
     Softplus activation function.
     
-    Softplus(x) = ln(1 + e^x)
+    Softplus(x) = log(1 + e^x)
     
     Properties:
     - Smooth approximation of ReLU
     - Always positive
     - Differentiable everywhere
-    - Used in probabilistic models
+    - Can be used as smooth ReLU
     
     Args:
         x: Input array
@@ -374,7 +386,7 @@ def softplus_activation(x: np.ndarray) -> np.ndarray:
         >>> print(output)
         [0.1269 0.3133 0.6931 1.3133 2.1269]
     """
-    return np.log(1 + np.exp(np.clip(x, -20, 20)))
+    return np.log(1 + np.exp(np.clip(x, -500, 500)))
 
 
 def softsign_activation(x: np.ndarray) -> np.ndarray:
@@ -388,7 +400,8 @@ def softsign_activation(x: np.ndarray) -> np.ndarray:
     Properties:
     - Similar to tanh but polynomial
     - Faster than tanh
-    - Smoother saturation
+    - Smoother than ReLU
+    - Bounded output
     
     Args:
         x: Input array
@@ -410,14 +423,17 @@ def softsign_activation(x: np.ndarray) -> np.ndarray:
 
 def hard_sigmoid_activation(x: np.ndarray) -> np.ndarray:
     """
-    Hard Sigmoid activation (piecewise linear approximation).
+    Hard sigmoid activation function.
     
-    HardSigmoid(x) = max(0, min(1, 0.2x + 0.5))
+    HardSigmoid(x) = clip((x + 1) / 2, 0, 1)
+    
+    Output range: [0, 1]
     
     Properties:
+    - Piecewise linear approximation of sigmoid
     - Faster than sigmoid
-    - Piecewise linear
-    - Good for mobile/embedded
+    - Used in mobile/embedded systems
+    - Good for quantization
     
     Args:
         x: Input array
@@ -429,24 +445,27 @@ def hard_sigmoid_activation(x: np.ndarray) -> np.ndarray:
         >>> import numpy as np
         >>> from ilovetools.ml import hard_sigmoid_activation
         
-        >>> x = np.array([-3, -1, 0, 1, 3])
+        >>> x = np.array([-2, -1, 0, 1, 2])
         >>> output = hard_sigmoid_activation(x)
         >>> print(output)
-        [0.0 0.3 0.5 0.7 1.0]
+        [0.0000 0.0000 0.5000 1.0000 1.0000]
     """
-    return np.clip(0.2 * x + 0.5, 0, 1)
+    return np.clip((x + 1) / 2, 0, 1)
 
 
 def hard_tanh_activation(x: np.ndarray) -> np.ndarray:
     """
-    Hard Tanh activation (piecewise linear approximation).
+    Hard tanh activation function.
     
-    HardTanh(x) = max(-1, min(1, x))
+    HardTanh(x) = clip(x, -1, 1)
+    
+    Output range: [-1, 1]
     
     Properties:
+    - Piecewise linear approximation of tanh
     - Faster than tanh
-    - Piecewise linear
-    - Bounded output
+    - Used in mobile/embedded systems
+    - Good for quantization
     
     Args:
         x: Input array
@@ -473,10 +492,10 @@ def softmax_activation(
     """
     Softmax activation function.
     
-    Softmax(x_i) = e^(x_i) / Σ(e^(x_j))
+    Softmax(x_i) = e^(x_i) / Σ e^(x_j)
     
     Properties:
-    - Converts to probability distribution
+    - Converts logits to probabilities
     - Output sums to 1
     - Used for multi-class classification
     - Differentiable
@@ -492,11 +511,11 @@ def softmax_activation(
         >>> import numpy as np
         >>> from ilovetools.ml import softmax_activation
         
-        >>> x = np.array([1.0, 2.0, 3.0])
+        >>> x = np.array([1, 2, 3, 4, 5])
         >>> output = softmax_activation(x)
         >>> print(output)
-        [0.0900 0.2447 0.6652]
-        >>> print(output.sum())
+        [0.0117 0.0317 0.0861 0.2341 0.6364]
+        >>> print(np.sum(output))  # Should be 1.0
         1.0
     """
     # Subtract max for numerical stability
@@ -510,15 +529,15 @@ def log_softmax_activation(
     axis: int = -1
 ) -> np.ndarray:
     """
-    Log-Softmax activation function.
+    Log-softmax activation function.
     
-    LogSoftmax(x_i) = log(e^(x_i) / Σ(e^(x_j)))
-                    = x_i - log(Σ(e^(x_j)))
+    LogSoftmax(x_i) = log(e^(x_i) / Σ e^(x_j))
+                    = x_i - log(Σ e^(x_j))
     
     Properties:
-    - Numerically stable
-    - Used with NLL loss
-    - Avoids underflow
+    - Numerically stable version of log(softmax(x))
+    - Used with negative log-likelihood loss
+    - Better numerical properties than log(softmax(x))
     
     Args:
         x: Input array
@@ -531,10 +550,10 @@ def log_softmax_activation(
         >>> import numpy as np
         >>> from ilovetools.ml import log_softmax_activation
         
-        >>> x = np.array([1.0, 2.0, 3.0])
+        >>> x = np.array([1, 2, 3, 4, 5])
         >>> output = log_softmax_activation(x)
         >>> print(output)
-        [-2.4076 -1.4076 -0.4076]
+        [-4.4519 -3.4519 -2.4519 -1.4519 -0.4519]
     """
     x_shifted = x - np.max(x, axis=axis, keepdims=True)
     return x_shifted - np.log(np.sum(np.exp(x_shifted), axis=axis, keepdims=True))
@@ -549,22 +568,13 @@ def sigmoid_derivative(x: np.ndarray) -> np.ndarray:
     σ'(x) = σ(x) × (1 - σ(x))
     
     Args:
-        x: Input array (or sigmoid output)
+        x: Input array (can be pre-activated or post-activated)
     
     Returns:
         Derivative
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import sigmoid_derivative
-        
-        >>> x = np.array([0.0])
-        >>> deriv = sigmoid_derivative(x)
-        >>> print(deriv)
-        [0.25]
     """
-    sig = sigmoid_activation(x)
-    return sig * (1 - sig)
+    s = sigmoid_activation(x)
+    return s * (1 - s)
 
 
 def tanh_derivative(x: np.ndarray) -> np.ndarray:
@@ -574,22 +584,13 @@ def tanh_derivative(x: np.ndarray) -> np.ndarray:
     tanh'(x) = 1 - tanh²(x)
     
     Args:
-        x: Input array (or tanh output)
+        x: Input array
     
     Returns:
         Derivative
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import tanh_derivative
-        
-        >>> x = np.array([0.0])
-        >>> deriv = tanh_derivative(x)
-        >>> print(deriv)
-        [1.0]
     """
-    tanh_x = np.tanh(x)
-    return 1 - tanh_x ** 2
+    t = tanh_activation(x)
+    return 1 - t**2
 
 
 def relu_derivative(x: np.ndarray) -> np.ndarray:
@@ -603,15 +604,6 @@ def relu_derivative(x: np.ndarray) -> np.ndarray:
     
     Returns:
         Derivative
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import relu_derivative
-        
-        >>> x = np.array([-1, 0, 1])
-        >>> deriv = relu_derivative(x)
-        >>> print(deriv)
-        [0 0 1]
     """
     return np.where(x > 0, 1, 0)
 
@@ -631,15 +623,6 @@ def leaky_relu_derivative(
     
     Returns:
         Derivative
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import leaky_relu_derivative
-        
-        >>> x = np.array([-1, 0, 1])
-        >>> deriv = leaky_relu_derivative(x, alpha=0.01)
-        >>> print(deriv)
-        [0.01 0.01 1.00]
     """
     return np.where(x > 0, 1, alpha)
 
@@ -659,15 +642,6 @@ def elu_derivative(
     
     Returns:
         Derivative
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import elu_derivative
-        
-        >>> x = np.array([-1, 0, 1])
-        >>> deriv = elu_derivative(x, alpha=1.0)
-        >>> print(deriv)
-        [0.3679 1.0000 1.0000]
     """
     return np.where(x > 0, 1, alpha * np.exp(x))
 
@@ -687,41 +661,23 @@ def swish_derivative(
     
     Returns:
         Derivative
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import swish_derivative
-        
-        >>> x = np.array([0.0])
-        >>> deriv = swish_derivative(x)
-        >>> print(deriv)
-        [0.5]
     """
     swish = swish_activation(x, beta)
-    sig = sigmoid_activation(beta * x)
-    return swish + sig * (1 - swish)
+    sigmoid = sigmoid_activation(beta * x)
+    return swish + sigmoid * (1 - swish)
 
 
 def softplus_derivative(x: np.ndarray) -> np.ndarray:
     """
     Derivative of Softplus activation.
     
-    Softplus'(x) = σ(x) = 1 / (1 + e^(-x))
+    Softplus'(x) = σ(x)
     
     Args:
         x: Input array
     
     Returns:
-        Derivative (sigmoid)
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import softplus_derivative
-        
-        >>> x = np.array([0.0])
-        >>> deriv = softplus_derivative(x)
-        >>> print(deriv)
-        [0.5]
+        Derivative
     """
     return sigmoid_activation(x)
 
@@ -739,7 +695,7 @@ def apply_activation(
     Args:
         x: Input array
         activation: Name of activation function
-        **kwargs: Additional parameters for activation
+        **kwargs: Additional arguments for activation function
     
     Returns:
         Activated output
@@ -748,36 +704,13 @@ def apply_activation(
         >>> import numpy as np
         >>> from ilovetools.ml import apply_activation
         
-        >>> x = np.array([-1, 0, 1])
+        >>> x = np.array([-2, -1, 0, 1, 2])
         >>> output = apply_activation(x, 'relu')
         >>> print(output)
-        [0 0 1]
+        [0 0 0 1 2]
     """
-    activation_map = {
-        'sigmoid': sigmoid_activation,
-        'tanh': tanh_activation,
-        'relu': relu_activation,
-        'leaky_relu': leaky_relu_activation,
-        'elu': elu_activation,
-        'selu': selu_activation,
-        'gelu': gelu_activation,
-        'swish': swish_activation,
-        'mish': mish_activation,
-        'softplus': softplus_activation,
-        'softsign': softsign_activation,
-        'hard_sigmoid': hard_sigmoid_activation,
-        'hard_tanh': hard_tanh_activation,
-        'softmax': softmax_activation,
-        'log_softmax': log_softmax_activation,
-        'linear': lambda x: x,
-        'none': lambda x: x,
-    }
-    
-    activation_lower = activation.lower()
-    if activation_lower not in activation_map:
-        raise ValueError(f"Unknown activation: {activation}")
-    
-    return activation_map[activation_lower](x, **kwargs)
+    activation_func = get_activation_function(activation)
+    return activation_func(x, **kwargs)
 
 
 def get_activation_function(activation: str):
@@ -793,8 +726,8 @@ def get_activation_function(activation: str):
     Examples:
         >>> from ilovetools.ml import get_activation_function
         
-        >>> relu = get_activation_function('relu')
-        >>> print(relu.__name__)
+        >>> relu_func = get_activation_function('relu')
+        >>> print(relu_func.__name__)
         relu_activation
     """
     activation_map = {
@@ -820,3 +753,23 @@ def get_activation_function(activation: str):
         raise ValueError(f"Unknown activation: {activation}")
     
     return activation_map[activation_lower]
+
+
+# ==================== CONVENIENT ALIASES ====================
+
+# Aliases without _activation suffix for convenience
+sigmoid = sigmoid_activation
+tanh = tanh_activation
+relu = relu_activation
+leaky_relu = leaky_relu_activation
+elu = elu_activation
+selu = selu_activation
+gelu = gelu_activation
+swish = swish_activation
+mish = mish_activation
+softplus = softplus_activation
+softsign = softsign_activation
+hard_sigmoid = hard_sigmoid_activation
+hard_tanh = hard_tanh_activation
+softmax = softmax_activation
+log_softmax = log_softmax_activation
