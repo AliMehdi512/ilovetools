@@ -1,603 +1,716 @@
 """
-Regularization Techniques for Machine Learning
-Comprehensive implementation of regularization methods to prevent overfitting
+Dropout and Regularization Techniques
+
+This module provides regularization methods to prevent overfitting:
+- Dropout (Standard, Spatial, Variational, DropConnect)
+- L1 Regularization (Lasso)
+- L2 Regularization (Ridge)
+- Elastic Net (L1 + L2)
+- Weight Decay
+- Early Stopping utilities
+
+All operations support batched inputs and are optimized for deep learning.
 """
 
 import numpy as np
-from typing import Tuple, Optional, Callable, List
-
-__all__ = [
-    # L1/L2 Regularization
-    'l1_regularization',
-    'l2_regularization',
-    'elastic_net_regularization',
-    'l1_penalty',
-    'l2_penalty',
-    'elastic_net_penalty',
-    
-    # Dropout
-    'dropout',
-    'dropout_mask',
-    'inverted_dropout',
-    
-    # Early Stopping
-    'early_stopping_monitor',
-    'should_stop_early',
-    
-    # Weight Constraints
-    'max_norm_constraint',
-    'unit_norm_constraint',
-    'non_negative_constraint',
-    
-    # Regularization Utilities
-    'compute_regularization_loss',
-    'apply_weight_decay',
-]
+from typing import Tuple, Optional, Dict, List
 
 
-def l1_regularization(
-    weights: np.ndarray,
-    lambda_param: float = 0.01
-) -> float:
-    """
-    Compute L1 (Lasso) regularization penalty.
-    
-    L1 = λ × Σ|w_i|
-    
-    Creates sparse models by driving some weights to exactly zero.
-    Good for feature selection.
-    
-    Args:
-        weights: Model weights
-        lambda_param: Regularization strength (λ)
-    
-    Returns:
-        L1 penalty value
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import l1_regularization
-        
-        >>> weights = np.array([1.0, -2.0, 3.0, 0.5])
-        >>> penalty = l1_regularization(weights, lambda_param=0.01)
-        >>> print(f"L1 penalty: {penalty:.4f}")
-        L1 penalty: 0.0650
-    """
-    return lambda_param * np.sum(np.abs(weights))
-
-
-def l2_regularization(
-    weights: np.ndarray,
-    lambda_param: float = 0.01
-) -> float:
-    """
-    Compute L2 (Ridge) regularization penalty.
-    
-    L2 = λ × Σw_i²
-    
-    Shrinks all weights smoothly. Better for correlated features.
-    Most commonly used regularization.
-    
-    Args:
-        weights: Model weights
-        lambda_param: Regularization strength (λ)
-    
-    Returns:
-        L2 penalty value
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import l2_regularization
-        
-        >>> weights = np.array([1.0, -2.0, 3.0, 0.5])
-        >>> penalty = l2_regularization(weights, lambda_param=0.01)
-        >>> print(f"L2 penalty: {penalty:.4f}")
-        L2 penalty: 0.1425
-    """
-    return lambda_param * np.sum(weights ** 2)
-
-
-def elastic_net_regularization(
-    weights: np.ndarray,
-    l1_ratio: float = 0.5,
-    lambda_param: float = 0.01
-) -> float:
-    """
-    Compute Elastic Net regularization (L1 + L2 combination).
-    
-    Elastic Net = λ × (α × Σ|w_i| + (1-α) × Σw_i²)
-    
-    Combines benefits of L1 and L2. Good for grouped features.
-    
-    Args:
-        weights: Model weights
-        l1_ratio: Ratio of L1 to L2 (α), between 0 and 1
-        lambda_param: Overall regularization strength (λ)
-    
-    Returns:
-        Elastic Net penalty value
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import elastic_net_regularization
-        
-        >>> weights = np.array([1.0, -2.0, 3.0, 0.5])
-        >>> penalty = elastic_net_regularization(
-        ...     weights, l1_ratio=0.5, lambda_param=0.01
-        ... )
-        >>> print(f"Elastic Net penalty: {penalty:.4f}")
-        Elastic Net penalty: 0.1038
-    """
-    l1_term = l1_ratio * np.sum(np.abs(weights))
-    l2_term = (1 - l1_ratio) * np.sum(weights ** 2)
-    return lambda_param * (l1_term + l2_term)
-
-
-def l1_penalty(
-    weights: np.ndarray,
-    lambda_param: float = 0.01
-) -> np.ndarray:
-    """
-    Compute L1 gradient penalty for weight updates.
-    
-    Gradient = λ × sign(w)
-    
-    Args:
-        weights: Model weights
-        lambda_param: Regularization strength
-    
-    Returns:
-        L1 gradient penalty
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import l1_penalty
-        
-        >>> weights = np.array([1.0, -2.0, 0.0, 0.5])
-        >>> gradient_penalty = l1_penalty(weights, lambda_param=0.01)
-        >>> print(gradient_penalty)
-        [ 0.01 -0.01  0.    0.01]
-    """
-    return lambda_param * np.sign(weights)
-
-
-def l2_penalty(
-    weights: np.ndarray,
-    lambda_param: float = 0.01
-) -> np.ndarray:
-    """
-    Compute L2 gradient penalty for weight updates.
-    
-    Gradient = 2λ × w
-    
-    Args:
-        weights: Model weights
-        lambda_param: Regularization strength
-    
-    Returns:
-        L2 gradient penalty
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import l2_penalty
-        
-        >>> weights = np.array([1.0, -2.0, 3.0, 0.5])
-        >>> gradient_penalty = l2_penalty(weights, lambda_param=0.01)
-        >>> print(gradient_penalty)
-        [ 0.02 -0.04  0.06  0.01]
-    """
-    return 2 * lambda_param * weights
-
-
-def elastic_net_penalty(
-    weights: np.ndarray,
-    l1_ratio: float = 0.5,
-    lambda_param: float = 0.01
-) -> np.ndarray:
-    """
-    Compute Elastic Net gradient penalty for weight updates.
-    
-    Gradient = λ × (α × sign(w) + 2(1-α) × w)
-    
-    Args:
-        weights: Model weights
-        l1_ratio: Ratio of L1 to L2
-        lambda_param: Overall regularization strength
-    
-    Returns:
-        Elastic Net gradient penalty
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import elastic_net_penalty
-        
-        >>> weights = np.array([1.0, -2.0, 3.0, 0.5])
-        >>> gradient_penalty = elastic_net_penalty(
-        ...     weights, l1_ratio=0.5, lambda_param=0.01
-        ... )
-    """
-    l1_grad = l1_ratio * np.sign(weights)
-    l2_grad = 2 * (1 - l1_ratio) * weights
-    return lambda_param * (l1_grad + l2_grad)
-
+# ============================================================================
+# DROPOUT
+# ============================================================================
 
 def dropout(
-    X: np.ndarray,
+    x: np.ndarray,
     dropout_rate: float = 0.5,
     training: bool = True,
     seed: Optional[int] = None
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Apply dropout regularization.
+    Standard Dropout
     
-    During training: Randomly set neurons to 0 with probability dropout_rate
-    During inference: Use all neurons (no dropout)
+    Randomly drops neurons during training to prevent overfitting.
+    
+    Formula (Inverted Dropout):
+        Training: y = (mask * x) / (1 - p)
+        Inference: y = x
     
     Args:
-        X: Input data (samples × features)
+        x: Input tensor, any shape
         dropout_rate: Probability of dropping a neuron (0 to 1)
         training: Whether in training mode
         seed: Random seed for reproducibility
-    
-    Returns:
-        Tuple of (output after dropout, dropout mask)
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import dropout
         
-        >>> X = np.random.randn(100, 50)
-        >>> X_dropout, mask = dropout(X, dropout_rate=0.5, training=True)
-        >>> print(f"Dropped neurons: {np.sum(mask == 0)}")
+    Returns:
+        Tuple of (output, mask)
+        
+    Example:
+        >>> import numpy as np
+        >>> from ilovetools.ml.regularization import dropout
+        
+        >>> x = np.random.randn(32, 128)
+        >>> output, mask = dropout(x, dropout_rate=0.5, training=True)
+        >>> print(output.shape)  # (32, 128)
+        >>> print(f"Dropped {np.sum(mask == 0)} neurons")
+        
+        >>> # Inference mode
+        >>> output, mask = dropout(x, dropout_rate=0.5, training=False)
+        >>> print(np.array_equal(output, x))  # True
     """
-    if not training or dropout_rate == 0:
-        return X, np.ones_like(X)
+    if not training or dropout_rate == 0.0:
+        # No dropout during inference or if rate is 0
+        return x, np.ones_like(x)
     
+    if dropout_rate >= 1.0:
+        raise ValueError("dropout_rate must be less than 1.0")
+    
+    # Set random seed if provided
     if seed is not None:
         np.random.seed(seed)
     
-    # Create dropout mask
-    mask = np.random.binomial(1, 1 - dropout_rate, size=X.shape)
+    # Generate binary mask
+    mask = np.random.binomial(1, 1 - dropout_rate, size=x.shape)
     
-    # Apply mask and scale (inverted dropout)
-    output = X * mask / (1 - dropout_rate)
+    # Apply inverted dropout (scale during training)
+    output = (x * mask) / (1 - dropout_rate)
     
     return output, mask
 
 
-def dropout_mask(
-    shape: Tuple[int, ...],
-    dropout_rate: float = 0.5,
-    seed: Optional[int] = None
-) -> np.ndarray:
-    """
-    Generate a dropout mask.
-    
-    Args:
-        shape: Shape of the mask
-        dropout_rate: Probability of dropping
-        seed: Random seed
-    
-    Returns:
-        Binary dropout mask
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import dropout_mask
-        
-        >>> mask = dropout_mask((100, 50), dropout_rate=0.3)
-        >>> print(f"Active neurons: {np.sum(mask)}")
-    """
-    if seed is not None:
-        np.random.seed(seed)
-    
-    return np.random.binomial(1, 1 - dropout_rate, size=shape)
-
-
-def inverted_dropout(
-    X: np.ndarray,
+def spatial_dropout(
+    x: np.ndarray,
     dropout_rate: float = 0.5,
     training: bool = True,
     seed: Optional[int] = None
-) -> np.ndarray:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Apply inverted dropout (scales during training, not inference).
+    Spatial Dropout (for CNNs)
     
-    This is the preferred dropout implementation as it doesn't require
-    scaling during inference.
+    Drops entire feature maps instead of individual neurons.
+    Better for convolutional layers.
     
     Args:
-        X: Input data
-        dropout_rate: Dropout probability
-        training: Training mode flag
-        seed: Random seed
-    
-    Returns:
-        Output after dropout
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import inverted_dropout
+        x: Input tensor, shape (batch, channels, height, width)
+        dropout_rate: Probability of dropping a channel
+        training: Whether in training mode
+        seed: Random seed for reproducibility
         
-        >>> X = np.random.randn(100, 50)
-        >>> X_train = inverted_dropout(X, dropout_rate=0.5, training=True)
-        >>> X_test = inverted_dropout(X, dropout_rate=0.5, training=False)
-        >>> # X_test is unchanged, X_train has dropout applied
+    Returns:
+        Tuple of (output, mask)
+        
+    Example:
+        >>> x = np.random.randn(32, 64, 28, 28)  # (batch, channels, H, W)
+        >>> output, mask = spatial_dropout(x, dropout_rate=0.2, training=True)
+        >>> print(output.shape)  # (32, 64, 28, 28)
     """
-    if not training or dropout_rate == 0:
-        return X
+    if not training or dropout_rate == 0.0:
+        return x, np.ones_like(x)
+    
+    if x.ndim != 4:
+        raise ValueError("spatial_dropout requires 4D input (batch, channels, H, W)")
     
     if seed is not None:
         np.random.seed(seed)
     
-    mask = np.random.binomial(1, 1 - dropout_rate, size=X.shape)
-    return X * mask / (1 - dropout_rate)
+    batch_size, channels, height, width = x.shape
+    
+    # Generate mask for channels only
+    channel_mask = np.random.binomial(1, 1 - dropout_rate, size=(batch_size, channels, 1, 1))
+    
+    # Broadcast mask to full shape
+    mask = np.broadcast_to(channel_mask, x.shape).copy()
+    
+    # Apply inverted dropout
+    output = (x * mask) / (1 - dropout_rate)
+    
+    return output, mask
 
 
-def early_stopping_monitor(
-    validation_losses: List[float],
-    patience: int = 10,
-    min_delta: float = 0.0,
-    mode: str = 'min'
-) -> Tuple[bool, int, float]:
+def variational_dropout(
+    x: np.ndarray,
+    dropout_rate: float = 0.5,
+    training: bool = True,
+    seed: Optional[int] = None
+) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Monitor validation loss for early stopping.
+    Variational Dropout (for RNNs)
+    
+    Uses the same dropout mask across all time steps.
+    Better for recurrent networks.
     
     Args:
-        validation_losses: List of validation losses
-        patience: Number of epochs to wait for improvement
-        min_delta: Minimum change to qualify as improvement
-        mode: 'min' for loss, 'max' for accuracy
-    
-    Returns:
-        Tuple of (should_stop, epochs_without_improvement, best_loss)
-    
-    Examples:
-        >>> from ilovetools.ml import early_stopping_monitor
+        x: Input tensor, shape (batch, seq_len, features)
+        dropout_rate: Probability of dropping a feature
+        training: Whether in training mode
+        seed: Random seed for reproducibility
         
-        >>> val_losses = [1.0, 0.8, 0.7, 0.71, 0.72, 0.73]
-        >>> should_stop, epochs_no_improve, best = early_stopping_monitor(
-        ...     val_losses, patience=3
-        ... )
-        >>> print(f"Stop: {should_stop}, Best: {best:.2f}")
-        Stop: True, Best: 0.70
+    Returns:
+        Tuple of (output, mask)
+        
+    Example:
+        >>> x = np.random.randn(32, 10, 512)  # (batch, seq_len, features)
+        >>> output, mask = variational_dropout(x, dropout_rate=0.3, training=True)
+        >>> print(output.shape)  # (32, 10, 512)
     """
-    if len(validation_losses) < 2:
-        return False, 0, validation_losses[0] if validation_losses else float('inf')
+    if not training or dropout_rate == 0.0:
+        return x, np.ones_like(x)
     
-    if mode == 'min':
-        best_loss = min(validation_losses)
-        best_epoch = validation_losses.index(best_loss)
-    else:  # mode == 'max'
-        best_loss = max(validation_losses)
-        best_epoch = validation_losses.index(best_loss)
+    if x.ndim != 3:
+        raise ValueError("variational_dropout requires 3D input (batch, seq_len, features)")
     
-    epochs_without_improvement = len(validation_losses) - 1 - best_epoch
+    if seed is not None:
+        np.random.seed(seed)
     
-    # Check if there's improvement
-    if mode == 'min':
-        improved = validation_losses[-1] < (best_loss - min_delta)
-    else:
-        improved = validation_losses[-1] > (best_loss + min_delta)
+    batch_size, seq_len, features = x.shape
     
-    should_stop = epochs_without_improvement >= patience and not improved
+    # Generate mask for features only (shared across time)
+    feature_mask = np.random.binomial(1, 1 - dropout_rate, size=(batch_size, 1, features))
     
-    return should_stop, epochs_without_improvement, best_loss
+    # Broadcast mask to full shape
+    mask = np.broadcast_to(feature_mask, x.shape).copy()
+    
+    # Apply inverted dropout
+    output = (x * mask) / (1 - dropout_rate)
+    
+    return output, mask
+
+
+def dropconnect(
+    x: np.ndarray,
+    weights: np.ndarray,
+    dropout_rate: float = 0.5,
+    training: bool = True,
+    seed: Optional[int] = None
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    DropConnect
+    
+    Drops connections (weights) instead of neurons.
+    
+    Args:
+        x: Input tensor, shape (batch, in_features)
+        weights: Weight matrix, shape (out_features, in_features)
+        dropout_rate: Probability of dropping a connection
+        training: Whether in training mode
+        seed: Random seed for reproducibility
+        
+    Returns:
+        Tuple of (output, weight_mask)
+        
+    Example:
+        >>> x = np.random.randn(32, 128)
+        >>> weights = np.random.randn(256, 128)
+        >>> output, mask = dropconnect(x, weights, dropout_rate=0.5, training=True)
+        >>> print(output.shape)  # (32, 256)
+    """
+    if not training or dropout_rate == 0.0:
+        return np.dot(x, weights.T), np.ones_like(weights)
+    
+    if seed is not None:
+        np.random.seed(seed)
+    
+    # Generate mask for weights
+    mask = np.random.binomial(1, 1 - dropout_rate, size=weights.shape)
+    
+    # Apply mask to weights
+    masked_weights = (weights * mask) / (1 - dropout_rate)
+    
+    # Compute output
+    output = np.dot(x, masked_weights.T)
+    
+    return output, mask
+
+
+# ============================================================================
+# L1 REGULARIZATION (LASSO)
+# ============================================================================
+
+def l1_regularization(
+    weights: np.ndarray,
+    lambda_: float = 0.01
+) -> float:
+    """
+    L1 Regularization (Lasso)
+    
+    Adds absolute value penalty to loss.
+    Encourages sparsity (many weights become zero).
+    
+    Formula:
+        L1 = λ Σ|w_i|
+    
+    Args:
+        weights: Weight tensor
+        lambda_: Regularization strength
+        
+    Returns:
+        L1 penalty value
+        
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> penalty = l1_regularization(weights, lambda_=0.01)
+        >>> print(f"L1 penalty: {penalty:.4f}")
+    """
+    return lambda_ * np.sum(np.abs(weights))
+
+
+def l1_gradient(
+    weights: np.ndarray,
+    lambda_: float = 0.01
+) -> np.ndarray:
+    """
+    Gradient of L1 regularization
+    
+    Formula:
+        ∂L1/∂w = λ × sign(w)
+    
+    Args:
+        weights: Weight tensor
+        lambda_: Regularization strength
+        
+    Returns:
+        Gradient of L1 penalty
+        
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> grad = l1_gradient(weights, lambda_=0.01)
+        >>> print(grad.shape)  # (256, 128)
+    """
+    return lambda_ * np.sign(weights)
+
+
+# Alias for backward compatibility
+l1_penalty = l1_gradient
+
+
+# ============================================================================
+# L2 REGULARIZATION (RIDGE)
+# ============================================================================
+
+def l2_regularization(
+    weights: np.ndarray,
+    lambda_: float = 0.01
+) -> float:
+    """
+    L2 Regularization (Ridge / Weight Decay)
+    
+    Adds squared penalty to loss.
+    Prevents large weights, encourages smooth distribution.
+    
+    Formula:
+        L2 = λ Σw_i²
+    
+    Args:
+        weights: Weight tensor
+        lambda_: Regularization strength
+        
+    Returns:
+        L2 penalty value
+        
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> penalty = l2_regularization(weights, lambda_=0.01)
+        >>> print(f"L2 penalty: {penalty:.4f}")
+    """
+    return lambda_ * np.sum(weights ** 2)
+
+
+def l2_gradient(
+    weights: np.ndarray,
+    lambda_: float = 0.01
+) -> np.ndarray:
+    """
+    Gradient of L2 regularization
+    
+    Formula:
+        ∂L2/∂w = 2λw
+    
+    Args:
+        weights: Weight tensor
+        lambda_: Regularization strength
+        
+    Returns:
+        Gradient of L2 penalty
+        
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> grad = l2_gradient(weights, lambda_=0.01)
+        >>> print(grad.shape)  # (256, 128)
+    """
+    return 2 * lambda_ * weights
+
+
+# Alias for backward compatibility
+l2_penalty = l2_gradient
+
+
+def weight_decay(
+    weights: np.ndarray,
+    learning_rate: float,
+    decay_rate: float = 0.01
+) -> np.ndarray:
+    """
+    Weight Decay (equivalent to L2 regularization)
+    
+    Directly decays weights during optimization.
+    
+    Formula:
+        w_new = w - lr × decay × w
+              = w × (1 - lr × decay)
+    
+    Args:
+        weights: Weight tensor
+        learning_rate: Learning rate
+        decay_rate: Decay rate (equivalent to λ in L2)
+        
+    Returns:
+        Decayed weights
+        
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> weights_new = weight_decay(weights, learning_rate=0.01, decay_rate=0.01)
+        >>> print(weights_new.shape)  # (256, 128)
+    """
+    return weights * (1 - learning_rate * decay_rate)
+
+
+# Alias
+apply_weight_decay = weight_decay
+
+
+# ============================================================================
+# ELASTIC NET (L1 + L2)
+# ============================================================================
+
+def elastic_net_regularization(
+    weights: np.ndarray,
+    lambda_: float = 0.01,
+    alpha: float = 0.5
+) -> float:
+    """
+    Elastic Net Regularization (L1 + L2)
+    
+    Combines L1 and L2 penalties.
+    
+    Formula:
+        ElasticNet = α × L1 + (1-α) × L2
+                   = α × λ Σ|w_i| + (1-α) × λ Σw_i²
+    
+    Args:
+        weights: Weight tensor
+        lambda_: Overall regularization strength
+        alpha: Balance between L1 and L2 (0 to 1)
+               alpha=1: pure L1
+               alpha=0: pure L2
+               alpha=0.5: equal mix
+        
+    Returns:
+        Elastic net penalty value
+        
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> penalty = elastic_net_regularization(weights, lambda_=0.01, alpha=0.5)
+        >>> print(f"Elastic net penalty: {penalty:.4f}")
+    """
+    l1_term = alpha * l1_regularization(weights, lambda_)
+    l2_term = (1 - alpha) * l2_regularization(weights, lambda_)
+    return l1_term + l2_term
+
+
+def elastic_net_gradient(
+    weights: np.ndarray,
+    lambda_: float = 0.01,
+    alpha: float = 0.5
+) -> np.ndarray:
+    """
+    Gradient of Elastic Net regularization
+    
+    Formula:
+        ∂ElasticNet/∂w = α × λ × sign(w) + (1-α) × 2λw
+    
+    Args:
+        weights: Weight tensor
+        lambda_: Overall regularization strength
+        alpha: Balance between L1 and L2
+        
+    Returns:
+        Gradient of elastic net penalty
+        
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> grad = elastic_net_gradient(weights, lambda_=0.01, alpha=0.5)
+        >>> print(grad.shape)  # (256, 128)
+    """
+    l1_grad = alpha * l1_gradient(weights, lambda_)
+    l2_grad = (1 - alpha) * l2_gradient(weights, lambda_)
+    return l1_grad + l2_grad
+
+
+# Alias
+elastic_net_penalty = elastic_net_gradient
+
+
+# ============================================================================
+# EARLY STOPPING
+# ============================================================================
+
+class EarlyStopping:
+    """
+    Early Stopping utility
+    
+    Stops training when validation loss stops improving.
+    
+    Example:
+        >>> from ilovetools.ml.regularization import EarlyStopping
+        
+        >>> early_stopping = EarlyStopping(patience=10, min_delta=0.001)
+        
+        >>> for epoch in range(100):
+        ...     train_loss = train_one_epoch()
+        ...     val_loss = validate()
+        ...     
+        ...     if early_stopping(val_loss):
+        ...         print(f"Early stopping at epoch {epoch}")
+        ...         break
+        ...     
+        ...     if early_stopping.should_save():
+        ...         save_model()
+    """
+    
+    def __init__(
+        self,
+        patience: int = 10,
+        min_delta: float = 0.0,
+        mode: str = 'min'
+    ):
+        """
+        Initialize Early Stopping
+        
+        Args:
+            patience: Number of epochs to wait before stopping
+            min_delta: Minimum change to qualify as improvement
+            mode: 'min' for loss, 'max' for accuracy
+        """
+        self.patience = patience
+        self.min_delta = min_delta
+        self.mode = mode
+        
+        self.counter = 0
+        self.best_score = None
+        self.early_stop = False
+        self.save_checkpoint = False
+        
+        if mode == 'min':
+            self.best_score = np.inf
+            self.is_better = lambda new, best: new < best - min_delta
+        else:
+            self.best_score = -np.inf
+            self.is_better = lambda new, best: new > best + min_delta
+    
+    def __call__(self, score: float) -> bool:
+        """
+        Check if should stop training
+        
+        Args:
+            score: Current validation score
+            
+        Returns:
+            True if should stop, False otherwise
+        """
+        self.save_checkpoint = False
+        
+        if self.is_better(score, self.best_score):
+            # Improvement
+            self.best_score = score
+            self.counter = 0
+            self.save_checkpoint = True
+        else:
+            # No improvement
+            self.counter += 1
+            if self.counter >= self.patience:
+                self.early_stop = True
+        
+        return self.early_stop
+    
+    def should_save(self) -> bool:
+        """Check if should save checkpoint"""
+        return self.save_checkpoint
+    
+    def reset(self):
+        """Reset early stopping state"""
+        self.counter = 0
+        self.early_stop = False
+        self.save_checkpoint = False
+        if self.mode == 'min':
+            self.best_score = np.inf
+        else:
+            self.best_score = -np.inf
+
+
+# Utility functions for early stopping
+def early_stopping_monitor(
+    val_losses: List[float],
+    patience: int = 10,
+    min_delta: float = 0.0
+) -> bool:
+    """
+    Simple early stopping monitor
+    
+    Args:
+        val_losses: List of validation losses
+        patience: Number of epochs to wait
+        min_delta: Minimum improvement
+        
+    Returns:
+        True if should stop
+    """
+    if len(val_losses) < patience + 1:
+        return False
+    
+    best_loss = min(val_losses[:-patience])
+    recent_best = min(val_losses[-patience:])
+    
+    return recent_best >= best_loss - min_delta
 
 
 def should_stop_early(
-    current_loss: float,
-    best_loss: float,
-    patience_counter: int,
-    patience: int = 10,
-    min_delta: float = 0.0,
-    mode: str = 'min'
-) -> Tuple[bool, int, float]:
-    """
-    Check if training should stop early (stateless version).
-    
-    Args:
-        current_loss: Current validation loss
-        best_loss: Best validation loss so far
-        patience_counter: Current patience counter
-        patience: Maximum patience
-        min_delta: Minimum improvement threshold
-        mode: 'min' or 'max'
-    
-    Returns:
-        Tuple of (should_stop, new_patience_counter, new_best_loss)
-    
-    Examples:
-        >>> from ilovetools.ml import should_stop_early
-        
-        >>> stop, counter, best = should_stop_early(
-        ...     current_loss=0.75,
-        ...     best_loss=0.70,
-        ...     patience_counter=2,
-        ...     patience=5
-        ... )
-        >>> print(f"Stop: {stop}, Counter: {counter}")
-        Stop: False, Counter: 3
-    """
-    if mode == 'min':
-        improved = current_loss < (best_loss - min_delta)
-    else:
-        improved = current_loss > (best_loss + min_delta)
-    
-    if improved:
-        new_best_loss = current_loss
-        new_patience_counter = 0
-    else:
-        new_best_loss = best_loss
-        new_patience_counter = patience_counter + 1
-    
-    should_stop = new_patience_counter >= patience
-    
-    return should_stop, new_patience_counter, new_best_loss
+    val_losses: List[float],
+    patience: int = 10
+) -> bool:
+    """Alias for early_stopping_monitor"""
+    return early_stopping_monitor(val_losses, patience)
 
 
-def max_norm_constraint(
+# ============================================================================
+# UTILITY FUNCTIONS
+# ============================================================================
+
+def apply_regularization(
     weights: np.ndarray,
-    max_norm: float = 3.0,
-    axis: int = 0
-) -> np.ndarray:
+    reg_type: str = 'l2',
+    lambda_: float = 0.01,
+    alpha: float = 0.5
+) -> float:
     """
-    Apply max-norm constraint to weights.
-    
-    Constrains the norm of weight vectors to be at most max_norm.
-    Common in deep learning to prevent weights from growing too large.
+    Apply regularization by type
     
     Args:
-        weights: Weight matrix
-        max_norm: Maximum allowed norm
-        axis: Axis along which to compute norm (0 for columns, 1 for rows)
-    
-    Returns:
-        Constrained weights
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import max_norm_constraint
+        weights: Weight tensor
+        reg_type: Type of regularization ('l1', 'l2', 'elastic_net')
+        lambda_: Regularization strength
+        alpha: Balance for elastic net
         
-        >>> weights = np.random.randn(100, 50) * 10
-        >>> constrained = max_norm_constraint(weights, max_norm=3.0)
-        >>> norms = np.linalg.norm(constrained, axis=0)
-        >>> print(f"Max norm: {norms.max():.2f}")
-        Max norm: 3.00
-    """
-    norms = np.linalg.norm(weights, axis=axis, keepdims=True)
-    scale = np.minimum(1.0, max_norm / (norms + 1e-8))
-    return weights * scale
-
-
-def unit_norm_constraint(
-    weights: np.ndarray,
-    axis: int = 0
-) -> np.ndarray:
-    """
-    Normalize weights to unit norm.
-    
-    Forces weight vectors to have norm = 1.
-    
-    Args:
-        weights: Weight matrix
-        axis: Axis along which to normalize
-    
     Returns:
-        Unit-normalized weights
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import unit_norm_constraint
+        Regularization penalty
         
-        >>> weights = np.random.randn(100, 50)
-        >>> normalized = unit_norm_constraint(weights, axis=0)
-        >>> norms = np.linalg.norm(normalized, axis=0)
-        >>> print(f"All norms = 1: {np.allclose(norms, 1.0)}")
-        All norms = 1: True
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> penalty = apply_regularization(weights, reg_type='l2', lambda_=0.01)
     """
-    norms = np.linalg.norm(weights, axis=axis, keepdims=True)
-    return weights / (norms + 1e-8)
-
-
-def non_negative_constraint(
-    weights: np.ndarray
-) -> np.ndarray:
-    """
-    Apply non-negative constraint (ReLU on weights).
-    
-    Forces all weights to be >= 0.
-    
-    Args:
-        weights: Weight matrix
-    
-    Returns:
-        Non-negative weights
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import non_negative_constraint
-        
-        >>> weights = np.array([1.0, -2.0, 3.0, -0.5])
-        >>> constrained = non_negative_constraint(weights)
-        >>> print(constrained)
-        [1. 0. 3. 0.]
-    """
-    return np.maximum(0, weights)
+    if reg_type == 'l1':
+        return l1_regularization(weights, lambda_)
+    elif reg_type == 'l2':
+        return l2_regularization(weights, lambda_)
+    elif reg_type == 'elastic_net':
+        return elastic_net_regularization(weights, lambda_, alpha)
+    else:
+        raise ValueError(f"Unknown regularization type: {reg_type}")
 
 
 def compute_regularization_loss(
     weights: np.ndarray,
     reg_type: str = 'l2',
-    lambda_param: float = 0.01,
-    l1_ratio: float = 0.5
+    lambda_: float = 0.01,
+    alpha: float = 0.5
 ) -> float:
+    """Alias for apply_regularization"""
+    return apply_regularization(weights, reg_type, lambda_, alpha)
+
+
+def compute_regularization_gradient(
+    weights: np.ndarray,
+    reg_type: str = 'l2',
+    lambda_: float = 0.01,
+    alpha: float = 0.5
+) -> np.ndarray:
     """
-    Compute regularization loss based on type.
+    Compute regularization gradient by type
     
     Args:
-        weights: Model weights
-        reg_type: Type of regularization ('l1', 'l2', 'elastic_net', 'none')
-        lambda_param: Regularization strength
-        l1_ratio: L1 ratio for elastic net
-    
-    Returns:
-        Regularization loss
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import compute_regularization_loss
+        weights: Weight tensor
+        reg_type: Type of regularization ('l1', 'l2', 'elastic_net')
+        lambda_: Regularization strength
+        alpha: Balance for elastic net
         
-        >>> weights = np.random.randn(100)
-        >>> 
-        >>> l1_loss = compute_regularization_loss(weights, 'l1', 0.01)
-        >>> l2_loss = compute_regularization_loss(weights, 'l2', 0.01)
-        >>> elastic_loss = compute_regularization_loss(
-        ...     weights, 'elastic_net', 0.01, l1_ratio=0.5
-        ... )
+    Returns:
+        Regularization gradient
+        
+    Example:
+        >>> weights = np.random.randn(256, 128)
+        >>> grad = compute_regularization_gradient(weights, reg_type='l2')
     """
-    if reg_type == 'none' or lambda_param == 0:
-        return 0.0
-    elif reg_type == 'l1':
-        return l1_regularization(weights, lambda_param)
+    if reg_type == 'l1':
+        return l1_gradient(weights, lambda_)
     elif reg_type == 'l2':
-        return l2_regularization(weights, lambda_param)
+        return l2_gradient(weights, lambda_)
     elif reg_type == 'elastic_net':
-        return elastic_net_regularization(weights, l1_ratio, lambda_param)
+        return elastic_net_gradient(weights, lambda_, alpha)
     else:
         raise ValueError(f"Unknown regularization type: {reg_type}")
 
 
-def apply_weight_decay(
-    weights: np.ndarray,
-    learning_rate: float,
-    weight_decay: float = 0.01
+def get_dropout_rate_schedule(
+    initial_rate: float = 0.5,
+    final_rate: float = 0.1,
+    num_epochs: int = 100,
+    schedule_type: str = 'linear'
 ) -> np.ndarray:
     """
-    Apply weight decay (L2 regularization in optimizer).
-    
-    Weight decay is equivalent to L2 regularization but applied
-    directly in the optimizer update step.
-    
-    w = w × (1 - lr × decay)
+    Generate dropout rate schedule
     
     Args:
-        weights: Current weights
-        learning_rate: Learning rate
-        weight_decay: Weight decay coefficient
-    
-    Returns:
-        Weights after decay
-    
-    Examples:
-        >>> import numpy as np
-        >>> from ilovetools.ml import apply_weight_decay
+        initial_rate: Starting dropout rate
+        final_rate: Ending dropout rate
+        num_epochs: Number of epochs
+        schedule_type: 'linear', 'exponential', or 'cosine'
         
-        >>> weights = np.array([1.0, 2.0, 3.0])
-        >>> decayed = apply_weight_decay(
-        ...     weights, learning_rate=0.01, weight_decay=0.01
-        ... )
-        >>> print(decayed)
-        [0.9999 1.9998 2.9997]
+    Returns:
+        Array of dropout rates for each epoch
+        
+    Example:
+        >>> rates = get_dropout_rate_schedule(0.5, 0.1, 100, 'linear')
+        >>> print(rates[:5])  # First 5 epochs
     """
-    return weights * (1 - learning_rate * weight_decay)
+    if schedule_type == 'linear':
+        return np.linspace(initial_rate, final_rate, num_epochs)
+    elif schedule_type == 'exponential':
+        decay = (final_rate / initial_rate) ** (1 / num_epochs)
+        return initial_rate * (decay ** np.arange(num_epochs))
+    elif schedule_type == 'cosine':
+        return final_rate + 0.5 * (initial_rate - final_rate) * \
+               (1 + np.cos(np.pi * np.arange(num_epochs) / num_epochs))
+    else:
+        raise ValueError(f"Unknown schedule type: {schedule_type}")
+
+
+# Weight constraints (for backward compatibility)
+def max_norm_constraint(weights: np.ndarray, max_value: float = 3.0) -> np.ndarray:
+    """Constrain weights to maximum norm"""
+    norm = np.linalg.norm(weights)
+    if norm > max_value:
+        return weights * (max_value / norm)
+    return weights
+
+
+def unit_norm_constraint(weights: np.ndarray) -> np.ndarray:
+    """Constrain weights to unit norm"""
+    return weights / (np.linalg.norm(weights) + 1e-8)
+
+
+def non_negative_constraint(weights: np.ndarray) -> np.ndarray:
+    """Constrain weights to be non-negative"""
+    return np.maximum(weights, 0)
+
+
+# Aliases for inverted dropout
+inverted_dropout = dropout
+dropout_mask = dropout
