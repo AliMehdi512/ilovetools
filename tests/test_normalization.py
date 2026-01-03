@@ -1,5 +1,5 @@
 """
-Tests for normalization techniques module
+Tests for Batch Normalization and Layer Normalization
 """
 
 import numpy as np
@@ -10,425 +10,395 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from ilovetools.ml.normalization import (
-    # Main functions
-    batch_normalization,
-    layer_normalization,
-    group_normalization,
-    instance_normalization,
-    weight_normalization,
-    # Forward passes with cache
-    batch_norm_forward,
-    layer_norm_forward,
-    # Utilities
-    create_normalization_params,
-    apply_normalization,
+    # Classes
+    BatchNorm1d,
+    BatchNorm2d,
+    LayerNorm,
+    GroupNorm,
+    InstanceNorm,
+    # Functional API
+    batch_norm_1d,
+    layer_norm,
+    group_norm,
+    instance_norm,
     # Aliases
-    batchnorm,
+    batchnorm1d,
     layernorm,
     groupnorm,
     instancenorm,
-    weightnorm,
 )
 
 
-def test_batch_normalization():
-    """Test Batch Normalization"""
-    print("Testing batch_normalization...")
+def test_batchnorm1d_training():
+    """Test BatchNorm1d in training mode"""
+    print("Testing BatchNorm1d (training)...")
     
-    # Test 2D input (fully connected)
-    x = np.random.randn(32, 64)
-    gamma = np.ones(64)
-    beta = np.zeros(64)
+    bn = BatchNorm1d(num_features=128)
+    x = np.random.randn(32, 128)
     
-    out, running_mean, running_var = batch_normalization(
-        x, gamma, beta, training=True
-    )
+    output = bn.forward(x, training=True)
     
-    assert out.shape == x.shape, "Output shape should match input"
-    assert running_mean.shape == (64,), "Running mean shape incorrect"
-    assert running_var.shape == (64,), "Running var shape incorrect"
+    assert output.shape == x.shape, "Output shape should match input"
     
     # Check normalization (mean ≈ 0, var ≈ 1)
-    assert np.abs(np.mean(out)) < 0.1, "Mean should be close to 0"
-    assert np.abs(np.var(out) - 1.0) < 0.2, "Variance should be close to 1"
+    output_mean = np.mean(output, axis=0)
+    output_var = np.var(output, axis=0)
     
-    print("✓ batch_normalization passed")
+    assert np.allclose(output_mean, 0, atol=1e-6), "Mean should be close to 0"
+    assert np.allclose(output_var, 1, atol=1e-1), "Variance should be close to 1"
+    
+    # Check running statistics updated
+    assert bn.num_batches_tracked == 1, "Should track batch count"
+    
+    print("✓ BatchNorm1d (training) passed")
 
 
-def test_batch_normalization_4d():
-    """Test Batch Normalization with 4D input (CNN)"""
-    print("Testing batch_normalization with 4D input...")
+def test_batchnorm1d_inference():
+    """Test BatchNorm1d in inference mode"""
+    print("Testing BatchNorm1d (inference)...")
     
-    # Test 4D input (convolutional)
-    x = np.random.randn(8, 32, 16, 16)  # (N, C, H, W)
-    gamma = np.ones(32)
-    beta = np.zeros(32)
+    bn = BatchNorm1d(num_features=128)
     
-    out, running_mean, running_var = batch_normalization(
-        x, gamma, beta, training=True
-    )
+    # Train on some batches
+    for _ in range(10):
+        x_train = np.random.randn(32, 128)
+        bn.forward(x_train, training=True)
     
-    assert out.shape == x.shape, "Output shape should match input"
-    assert running_mean.shape == (32,), "Running mean shape incorrect"
+    # Test inference
+    x_test = np.random.randn(1, 128)
+    output = bn.forward(x_test, training=False)
     
-    print("✓ batch_normalization 4D passed")
+    assert output.shape == x_test.shape, "Output shape should match input"
+    assert bn.num_batches_tracked == 10, "Should have tracked 10 batches"
+    
+    print("✓ BatchNorm1d (inference) passed")
 
 
-def test_batch_normalization_inference():
-    """Test Batch Normalization in inference mode"""
-    print("Testing batch_normalization inference mode...")
+def test_batchnorm1d_backward():
+    """Test BatchNorm1d backward pass"""
+    print("Testing BatchNorm1d backward...")
     
-    x = np.random.randn(32, 64)
-    gamma = np.ones(64)
-    beta = np.zeros(64)
-    running_mean = np.random.randn(64)
-    running_var = np.abs(np.random.randn(64))
+    bn = BatchNorm1d(num_features=128)
+    x = np.random.randn(32, 128)
     
-    out, _, _ = batch_normalization(
-        x, gamma, beta, running_mean, running_var, training=False
-    )
+    # Forward
+    output = bn.forward(x, training=True)
     
-    assert out.shape == x.shape, "Output shape should match input"
-    print("✓ batch_normalization inference passed")
+    # Backward
+    grad_output = np.random.randn(*output.shape)
+    grad_input, grads = bn.backward(grad_output)
+    
+    assert grad_input.shape == x.shape, "Gradient shape should match input"
+    assert grads['gamma'].shape == (128,), "Gamma gradient shape incorrect"
+    assert grads['beta'].shape == (128,), "Beta gradient shape incorrect"
+    
+    print("✓ BatchNorm1d backward passed")
 
 
-def test_layer_normalization():
-    """Test Layer Normalization"""
-    print("Testing layer_normalization...")
+def test_batchnorm2d_training():
+    """Test BatchNorm2d for CNNs"""
+    print("Testing BatchNorm2d...")
     
-    # Test 2D input
-    x = np.random.randn(32, 512)
-    gamma = np.ones(512)
-    beta = np.zeros(512)
+    bn = BatchNorm2d(num_features=64)
+    x = np.random.randn(32, 64, 28, 28)
     
-    out = layer_normalization(x, gamma, beta)
+    output = bn.forward(x, training=True)
     
-    assert out.shape == x.shape, "Output shape should match input"
+    assert output.shape == x.shape, "Output shape should match input"
+    
+    # Check normalization per channel
+    for c in range(64):
+        channel_data = output[:, c, :, :]
+        channel_mean = np.mean(channel_data)
+        channel_var = np.var(channel_data)
+        
+        assert np.abs(channel_mean) < 1e-5, f"Channel {c} mean should be close to 0"
+        assert np.abs(channel_var - 1) < 0.2, f"Channel {c} variance should be close to 1"
+    
+    print("✓ BatchNorm2d passed")
+
+
+def test_layernorm():
+    """Test LayerNorm"""
+    print("Testing LayerNorm...")
+    
+    ln = LayerNorm(normalized_shape=512)
+    x = np.random.randn(32, 10, 512)
+    
+    output = ln.forward(x)
+    
+    assert output.shape == x.shape, "Output shape should match input"
     
     # Check normalization per sample
     for i in range(32):
-        sample_mean = np.mean(out[i])
-        sample_var = np.var(out[i])
-        assert np.abs(sample_mean) < 0.1, f"Sample {i} mean should be close to 0"
-        assert np.abs(sample_var - 1.0) < 0.2, f"Sample {i} variance should be close to 1"
+        for j in range(10):
+            sample_data = output[i, j, :]
+            sample_mean = np.mean(sample_data)
+            sample_var = np.var(sample_data)
+            
+            assert np.abs(sample_mean) < 1e-5, f"Sample ({i},{j}) mean should be close to 0"
+            assert np.abs(sample_var - 1) < 0.1, f"Sample ({i},{j}) variance should be close to 1"
     
-    print("✓ layer_normalization passed")
+    print("✓ LayerNorm passed")
 
 
-def test_layer_normalization_3d():
-    """Test Layer Normalization with 3D input (sequences)"""
-    print("Testing layer_normalization with 3D input...")
+def test_layernorm_backward():
+    """Test LayerNorm backward pass"""
+    print("Testing LayerNorm backward...")
     
-    # Test 3D input (sequences for Transformers)
-    x = np.random.randn(32, 10, 512)  # (N, L, D)
-    gamma = np.ones(512)
-    beta = np.zeros(512)
+    ln = LayerNorm(normalized_shape=512)
+    x = np.random.randn(32, 10, 512)
     
-    out = layer_normalization(x, gamma, beta)
+    # Forward
+    output = ln.forward(x)
     
-    assert out.shape == x.shape, "Output shape should match input"
+    # Backward
+    grad_output = np.random.randn(*output.shape)
+    grad_input, grads = ln.backward(grad_output)
     
-    # Check normalization per sample per timestep
-    for i in range(32):
-        for t in range(10):
-            token_mean = np.mean(out[i, t])
-            token_var = np.var(out[i, t])
-            assert np.abs(token_mean) < 0.1, "Token mean should be close to 0"
-            assert np.abs(token_var - 1.0) < 0.2, "Token variance should be close to 1"
+    assert grad_input.shape == x.shape, "Gradient shape should match input"
+    assert grads['gamma'].shape == (512,), "Gamma gradient shape incorrect"
+    assert grads['beta'].shape == (512,), "Beta gradient shape incorrect"
     
-    print("✓ layer_normalization 3D passed")
+    print("✓ LayerNorm backward passed")
 
 
-def test_group_normalization():
-    """Test Group Normalization"""
-    print("Testing group_normalization...")
+def test_groupnorm():
+    """Test GroupNorm"""
+    print("Testing GroupNorm...")
     
-    x = np.random.randn(8, 64, 32, 32)  # (N, C, H, W)
-    gamma = np.ones(64)
-    beta = np.zeros(64)
+    gn = GroupNorm(num_groups=8, num_channels=64)
+    x = np.random.randn(32, 64, 28, 28)
     
-    out = group_normalization(x, gamma, beta, num_groups=32)
+    output = gn.forward(x)
     
-    assert out.shape == x.shape, "Output shape should match input"
-    print("✓ group_normalization passed")
+    assert output.shape == x.shape, "Output shape should match input"
+    
+    print("✓ GroupNorm passed")
 
 
-def test_group_normalization_invalid_groups():
-    """Test Group Normalization with invalid number of groups"""
-    print("Testing group_normalization with invalid groups...")
+def test_instancenorm():
+    """Test InstanceNorm"""
+    print("Testing InstanceNorm...")
     
-    x = np.random.randn(8, 64, 32, 32)
-    gamma = np.ones(64)
-    beta = np.zeros(64)
+    in_norm = InstanceNorm(num_features=64)
+    x = np.random.randn(32, 64, 28, 28)
     
-    try:
-        out = group_normalization(x, gamma, beta, num_groups=30)
-        assert False, "Should raise ValueError"
-    except ValueError as e:
-        assert "divisible" in str(e).lower()
+    output = in_norm.forward(x)
     
-    print("✓ group_normalization invalid groups passed")
-
-
-def test_instance_normalization():
-    """Test Instance Normalization"""
-    print("Testing instance_normalization...")
+    assert output.shape == x.shape, "Output shape should match input"
     
-    x = np.random.randn(8, 64, 32, 32)  # (N, C, H, W)
-    gamma = np.ones(64)
-    beta = np.zeros(64)
-    
-    out = instance_normalization(x, gamma, beta)
-    
-    assert out.shape == x.shape, "Output shape should match input"
-    
-    # Check normalization per instance per channel
-    for n in range(8):
+    # Check normalization per instance and channel
+    for n in range(32):
         for c in range(64):
-            channel_mean = np.mean(out[n, c])
-            channel_var = np.var(out[n, c])
-            assert np.abs(channel_mean) < 0.1, "Channel mean should be close to 0"
-            assert np.abs(channel_var - 1.0) < 0.2, "Channel variance should be close to 1"
+            instance_data = output[n, c, :, :]
+            instance_mean = np.mean(instance_data)
+            instance_var = np.var(instance_data)
+            
+            assert np.abs(instance_mean) < 1e-5, f"Instance ({n},{c}) mean should be close to 0"
+            assert np.abs(instance_var - 1) < 0.2, f"Instance ({n},{c}) variance should be close to 1"
     
-    print("✓ instance_normalization passed")
+    print("✓ InstanceNorm passed")
 
 
-def test_weight_normalization():
-    """Test Weight Normalization"""
-    print("Testing weight_normalization...")
+def test_functional_batch_norm():
+    """Test functional batch_norm_1d"""
+    print("Testing functional batch_norm_1d...")
     
-    w = np.random.randn(512, 256)
+    x = np.random.randn(32, 128)
+    gamma = np.ones(128)
+    beta = np.zeros(128)
+    running_mean = np.zeros(128)
+    running_var = np.ones(128)
     
-    w_norm, g = weight_normalization(w, axis=0)
+    output, new_mean, new_var = batch_norm_1d(
+        x, gamma, beta, running_mean, running_var, training=True
+    )
     
-    assert w_norm.shape == w.shape, "Output shape should match input"
-    assert g.shape == (512,), "Magnitude shape incorrect"
+    assert output.shape == x.shape, "Output shape should match input"
+    assert new_mean is not None, "Running mean should be updated"
+    assert new_var is not None, "Running var should be updated"
     
-    # Check that each row has unit norm
-    for i in range(512):
-        row_norm = np.linalg.norm(w_norm[i])
-        expected_norm = g[i]
-        assert np.abs(row_norm - expected_norm) < 1e-5, "Row norm should match magnitude"
-    
-    print("✓ weight_normalization passed")
+    print("✓ functional batch_norm_1d passed")
 
 
-def test_weight_normalization_axis1():
-    """Test Weight Normalization with axis=1"""
-    print("Testing weight_normalization with axis=1...")
+def test_functional_layer_norm():
+    """Test functional layer_norm"""
+    print("Testing functional layer_norm...")
     
-    w = np.random.randn(512, 256)
-    
-    w_norm, g = weight_normalization(w, axis=1)
-    
-    assert w_norm.shape == w.shape, "Output shape should match input"
-    assert g.shape == (256,), "Magnitude shape incorrect"
-    
-    print("✓ weight_normalization axis=1 passed")
-
-
-def test_batch_norm_forward():
-    """Test Batch Normalization forward with cache"""
-    print("Testing batch_norm_forward...")
-    
-    x = np.random.randn(32, 64)
-    gamma = np.ones(64)
-    beta = np.zeros(64)
-    
-    bn_params = {
-        'mode': 'train',
-        'eps': 1e-5,
-        'momentum': 0.9,
-        'running_mean': np.zeros(64),
-        'running_var': np.ones(64)
-    }
-    
-    out, cache = batch_norm_forward(x, gamma, beta, bn_params)
-    
-    assert out.shape == x.shape, "Output shape should match input"
-    assert 'x' in cache, "Cache should contain input"
-    assert 'gamma' in cache, "Cache should contain gamma"
-    assert 'x_normalized' in cache, "Cache should contain normalized input"
-    
-    print("✓ batch_norm_forward passed")
-
-
-def test_layer_norm_forward():
-    """Test Layer Normalization forward with cache"""
-    print("Testing layer_norm_forward...")
-    
-    x = np.random.randn(32, 512)
+    x = np.random.randn(32, 10, 512)
     gamma = np.ones(512)
     beta = np.zeros(512)
     
-    out, cache = layer_norm_forward(x, gamma, beta)
+    output = layer_norm(x, gamma, beta)
     
-    assert out.shape == x.shape, "Output shape should match input"
-    assert 'x' in cache, "Cache should contain input"
-    assert 'gamma' in cache, "Cache should contain gamma"
-    assert 'x_normalized' in cache, "Cache should contain normalized input"
+    assert output.shape == x.shape, "Output shape should match input"
     
-    print("✓ layer_norm_forward passed")
+    print("✓ functional layer_norm passed")
 
 
-def test_create_normalization_params():
-    """Test create_normalization_params utility"""
-    print("Testing create_normalization_params...")
+def test_functional_group_norm():
+    """Test functional group_norm"""
+    print("Testing functional group_norm...")
     
-    # Test batch norm params
-    params = create_normalization_params(64, 'batch')
-    assert 'gamma' in params, "Should have gamma"
-    assert 'beta' in params, "Should have beta"
-    assert 'running_mean' in params, "Batch norm should have running_mean"
-    assert 'running_var' in params, "Batch norm should have running_var"
-    assert params['gamma'].shape == (64,), "Gamma shape incorrect"
-    
-    # Test layer norm params
-    params = create_normalization_params(512, 'layer')
-    assert 'gamma' in params, "Should have gamma"
-    assert 'beta' in params, "Should have beta"
-    assert 'running_mean' not in params, "Layer norm should not have running_mean"
-    
-    print("✓ create_normalization_params passed")
-
-
-def test_apply_normalization():
-    """Test apply_normalization utility"""
-    print("Testing apply_normalization...")
-    
-    x = np.random.randn(32, 64)
+    x = np.random.randn(32, 64, 28, 28)
     gamma = np.ones(64)
     beta = np.zeros(64)
     
-    # Test batch norm
-    out = apply_normalization(x, 'batch', gamma, beta, training=True)
-    assert out.shape == x.shape, "Batch norm output shape incorrect"
+    output = group_norm(x, num_groups=8, gamma=gamma, beta=beta)
     
-    # Test layer norm
-    out = apply_normalization(x, 'layer', gamma, beta)
-    assert out.shape == x.shape, "Layer norm output shape incorrect"
+    assert output.shape == x.shape, "Output shape should match input"
     
-    print("✓ apply_normalization passed")
+    print("✓ functional group_norm passed")
 
 
-def test_apply_normalization_invalid():
-    """Test apply_normalization with invalid type"""
-    print("Testing apply_normalization with invalid type...")
+def test_functional_instance_norm():
+    """Test functional instance_norm"""
+    print("Testing functional instance_norm...")
     
-    x = np.random.randn(32, 64)
+    x = np.random.randn(32, 64, 28, 28)
     gamma = np.ones(64)
     beta = np.zeros(64)
     
-    try:
-        out = apply_normalization(x, 'invalid', gamma, beta)
-        assert False, "Should raise ValueError"
-    except ValueError as e:
-        assert "unknown" in str(e).lower()
+    output = instance_norm(x, gamma, beta)
     
-    print("✓ apply_normalization invalid type passed")
+    assert output.shape == x.shape, "Output shape should match input"
+    
+    print("✓ functional instance_norm passed")
+
+
+def test_batchnorm_reset_stats():
+    """Test resetting running statistics"""
+    print("Testing reset_running_stats...")
+    
+    bn = BatchNorm1d(num_features=128)
+    
+    # Train on some batches
+    for _ in range(5):
+        x = np.random.randn(32, 128)
+        bn.forward(x, training=True)
+    
+    assert bn.num_batches_tracked == 5, "Should have tracked 5 batches"
+    
+    # Reset
+    bn.reset_running_stats()
+    
+    assert bn.num_batches_tracked == 0, "Batch count should be reset"
+    assert np.allclose(bn.running_mean, 0), "Running mean should be reset"
+    assert np.allclose(bn.running_var, 1), "Running var should be reset"
+    
+    print("✓ reset_running_stats passed")
+
+
+def test_batchnorm_no_affine():
+    """Test BatchNorm without affine parameters"""
+    print("Testing BatchNorm without affine...")
+    
+    bn = BatchNorm1d(num_features=128, affine=False)
+    x = np.random.randn(32, 128)
+    
+    output = bn.forward(x, training=True)
+    
+    assert output.shape == x.shape, "Output shape should match input"
+    assert bn.gamma is None, "Gamma should be None"
+    assert bn.beta is None, "Beta should be None"
+    
+    print("✓ BatchNorm without affine passed")
+
+
+def test_layernorm_no_affine():
+    """Test LayerNorm without affine parameters"""
+    print("Testing LayerNorm without affine...")
+    
+    ln = LayerNorm(normalized_shape=512, elementwise_affine=False)
+    x = np.random.randn(32, 10, 512)
+    
+    output = ln.forward(x)
+    
+    assert output.shape == x.shape, "Output shape should match input"
+    assert ln.gamma is None, "Gamma should be None"
+    assert ln.beta is None, "Beta should be None"
+    
+    print("✓ LayerNorm without affine passed")
 
 
 def test_aliases():
     """Test function aliases"""
     print("Testing aliases...")
     
-    x = np.random.randn(32, 64)
-    gamma = np.ones(64)
-    beta = np.zeros(64)
+    x = np.random.randn(32, 128)
+    gamma = np.ones(128)
+    beta = np.zeros(128)
+    running_mean = np.zeros(128)
+    running_var = np.ones(128)
     
-    # Test batchnorm alias
-    out1, _, _ = batchnorm(x, gamma, beta, training=True)
-    out2, _, _ = batch_normalization(x, gamma, beta, training=True)
-    assert np.allclose(out1, out2), "Batchnorm alias should work"
+    # Test batchnorm1d alias
+    out1, _, _ = batchnorm1d(x, gamma, beta, running_mean, running_var, training=True)
+    out2, _, _ = batch_norm_1d(x, gamma, beta, running_mean, running_var, training=True)
+    assert np.allclose(out1, out2), "batchnorm1d alias should work"
     
     # Test layernorm alias
-    out1 = layernorm(x, gamma, beta)
-    out2 = layer_normalization(x, gamma, beta)
-    assert np.allclose(out1, out2), "Layernorm alias should work"
+    x_ln = np.random.randn(32, 10, 512)
+    gamma_ln = np.ones(512)
+    beta_ln = np.zeros(512)
+    
+    out1 = layernorm(x_ln, gamma_ln, beta_ln)
+    out2 = layer_norm(x_ln, gamma_ln, beta_ln)
+    assert np.allclose(out1, out2), "layernorm alias should work"
     
     print("✓ aliases passed")
 
 
-def test_batch_vs_layer_norm():
-    """Test difference between batch and layer normalization"""
-    print("Testing batch vs layer normalization...")
+def test_batchnorm_3d_input():
+    """Test BatchNorm1d with 3D input"""
+    print("Testing BatchNorm1d with 3D input...")
     
-    x = np.random.randn(32, 64)
-    gamma = np.ones(64)
-    beta = np.zeros(64)
+    bn = BatchNorm1d(num_features=128)
+    x = np.random.randn(32, 128, 10)  # (N, C, L)
     
-    # Batch norm normalizes across batch
-    out_batch, _, _ = batch_normalization(x, gamma, beta, training=True)
+    output = bn.forward(x, training=True)
     
-    # Layer norm normalizes across features
-    out_layer = layer_normalization(x, gamma, beta)
+    assert output.shape == x.shape, "Output shape should match input"
     
-    # They should produce different results
-    assert not np.allclose(out_batch, out_layer), "Batch and layer norm should differ"
-    
-    print("✓ batch vs layer norm comparison passed")
-
-
-def test_normalization_stability():
-    """Test numerical stability with extreme values"""
-    print("Testing normalization stability...")
-    
-    # Test with very large values
-    x = np.random.randn(32, 64) * 1000
-    gamma = np.ones(64)
-    beta = np.zeros(64)
-    
-    out, _, _ = batch_normalization(x, gamma, beta, training=True)
-    assert not np.any(np.isnan(out)), "Should not produce NaN"
-    assert not np.any(np.isinf(out)), "Should not produce Inf"
-    
-    # Test with very small values
-    x = np.random.randn(32, 64) * 1e-10
-    out, _, _ = batch_normalization(x, gamma, beta, training=True)
-    assert not np.any(np.isnan(out)), "Should not produce NaN with small values"
-    
-    print("✓ normalization stability passed")
+    print("✓ BatchNorm1d with 3D input passed")
 
 
 def run_all_tests():
     """Run all tests"""
     print("\n" + "="*60)
-    print("NORMALIZATION TECHNIQUES MODULE TESTS")
+    print("BATCH NORMALIZATION AND LAYER NORMALIZATION TESTS")
     print("="*60 + "\n")
     
-    # Batch Normalization
-    test_batch_normalization()
-    test_batch_normalization_4d()
-    test_batch_normalization_inference()
-    test_batch_norm_forward()
+    # BatchNorm1d tests
+    test_batchnorm1d_training()
+    test_batchnorm1d_inference()
+    test_batchnorm1d_backward()
+    test_batchnorm_3d_input()
+    test_batchnorm_no_affine()
+    test_batchnorm_reset_stats()
     
-    # Layer Normalization
-    test_layer_normalization()
-    test_layer_normalization_3d()
-    test_layer_norm_forward()
+    # BatchNorm2d tests
+    test_batchnorm2d_training()
     
-    # Group Normalization
-    test_group_normalization()
-    test_group_normalization_invalid_groups()
+    # LayerNorm tests
+    test_layernorm()
+    test_layernorm_backward()
+    test_layernorm_no_affine()
     
-    # Instance Normalization
-    test_instance_normalization()
+    # GroupNorm tests
+    test_groupnorm()
     
-    # Weight Normalization
-    test_weight_normalization()
-    test_weight_normalization_axis1()
+    # InstanceNorm tests
+    test_instancenorm()
     
-    # Utilities
-    test_create_normalization_params()
-    test_apply_normalization()
-    test_apply_normalization_invalid()
+    # Functional API tests
+    test_functional_batch_norm()
+    test_functional_layer_norm()
+    test_functional_group_norm()
+    test_functional_instance_norm()
     
     # Aliases
     test_aliases()
-    
-    # Comparisons
-    test_batch_vs_layer_norm()
-    test_normalization_stability()
     
     print("\n" + "="*60)
     print("ALL TESTS PASSED! ✓")
