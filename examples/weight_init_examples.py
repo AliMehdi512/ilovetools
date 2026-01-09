@@ -19,7 +19,7 @@ from ilovetools.ml.weight_init import (
     variance_scaling,
     constant,
     uniform,
-    normal,
+    normal as normal_init,  # Renamed to avoid conflict
     calculate_gain,
     get_initializer,
     WeightInitializer,
@@ -148,8 +148,8 @@ print(f"Output weights: shape={W_output.shape}")
 
 # Check orthogonality
 product = np.dot(W_hidden, W_hidden.T)
-identity = np.eye(hidden_size)
-orthogonality_error = np.max(np.abs(product - identity))
+identity_mat = np.eye(hidden_size)
+orthogonality_error = np.max(np.abs(product - identity_mat))
 
 print(f"\nOrthogonality check:")
 print(f"Max deviation from identity: {orthogonality_error:.6f}")
@@ -221,11 +221,11 @@ print(f"Fan-out mode: std={np.std(w_fan_out):.6f}")
 print(f"Fan-avg mode: std={np.std(w_fan_avg):.6f}")
 
 # Different distributions
-w_normal = variance_scaling(shape, scale=2.0, mode='fan_in', distribution='normal')
-w_uniform = variance_scaling(shape, scale=2.0, mode='fan_in', distribution='uniform')
+w_normal_dist = variance_scaling(shape, scale=2.0, mode='fan_in', distribution='normal')
+w_uniform_dist = variance_scaling(shape, scale=2.0, mode='fan_in', distribution='uniform')
 
-print(f"\nNormal distribution: std={np.std(w_normal):.6f}")
-print(f"Uniform distribution: std={np.std(w_uniform):.6f}")
+print(f"\nNormal distribution: std={np.std(w_normal_dist):.6f}")
+print(f"Uniform distribution: std={np.std(w_uniform_dist):.6f}")
 
 print("\n✓ Example 6 completed\n")
 
@@ -260,16 +260,16 @@ print(f"Residual weights: shape={W_residual.shape}")
 print(f"Transform weights: shape={W_transform.shape}")
 
 # Simulate residual connection
-x = np.random.randn(32, input_size)
-residual = np.dot(x, W_residual)
-transform = np.maximum(0, np.dot(x, W_transform))
-output = residual + transform
+x_input = np.random.randn(32, input_size)
+residual_output = np.dot(x_input, W_residual)
+transform_output = np.maximum(0, np.dot(x_input, W_transform))
+final_output = residual_output + transform_output
 
 print(f"\nResidual connection:")
-print(f"Input: mean={np.mean(x):.6f}, std={np.std(x):.6f}")
-print(f"Residual: mean={np.mean(residual):.6f}, std={np.std(residual):.6f}")
-print(f"Transform: mean={np.mean(transform):.6f}, std={np.std(transform):.6f}")
-print(f"Output: mean={np.mean(output):.6f}, std={np.std(output):.6f}")
+print(f"Input: mean={np.mean(x_input):.6f}, std={np.std(x_input):.6f}")
+print(f"Residual: mean={np.mean(residual_output):.6f}, std={np.std(residual_output):.6f}")
+print(f"Transform: mean={np.mean(transform_output):.6f}, std={np.std(transform_output):.6f}")
+print(f"Output: mean={np.mean(final_output):.6f}, std={np.std(final_output):.6f}")
 
 print("\n✓ Example 8 completed\n")
 
@@ -338,7 +338,7 @@ for activation in activations:
 print("\n✓ Example 11 completed\n")
 
 # ============================================================================
-# EXAMPLE 12: Deep Network Initialization
+# EXAMPLE 12: Deep Network Initialization (10 layers)
 # ============================================================================
 print("EXAMPLE 12: Deep Network Initialization (10 layers)")
 print("-" * 80)
