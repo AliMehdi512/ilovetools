@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ilovetools"
-version = "0.2.25"
+version = "0.2.26"
 description = "A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -12,7 +12,7 @@ license = "MIT"
 authors = [
     {name = "Ali Mehdi", email = "ali.mehdi.dev579@gmail.com"}
 ]
-keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "weight-initialization", "xavier-initialization", "he-initialization", "kaiming-initialization", "deep-learning", "neural-networks"]
+keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "dropout", "regularization", "overfitting", "spatial-dropout", "variational-dropout", "dropconnect", "alpha-dropout", "deep-learning", "neural-networks"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
