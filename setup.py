@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.2.27",
+    version="0.2.28",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
@@ -30,6 +30,7 @@ setup(
         "requests>=2.31.0",
         "numpy>=1.24.0",
         "pandas>=2.0.0",
+        "scipy>=1.10.0",
     ],
     extras_require={
         "ai": [
@@ -57,7 +58,7 @@ setup(
             "soundfile>=0.12.0",
         ],
     },
-    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, loss-functions, mse, mae, cross-entropy, focal-loss, dice-loss, regression, classification, segmentation, deep-learning",
+    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, data-augmentation, image-augmentation, text-augmentation, mixup, cutout, random-erasing, computer-vision, nlp, deep-learning",
     project_urls={
         "Bug Reports": "https://github.com/AliMehdi512/ilovetools/issues",
         "Source": "https://github.com/AliMehdi512/ilovetools",
