@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.2.28",
+    version="0.2.29",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
@@ -58,7 +58,7 @@ setup(
             "soundfile>=0.12.0",
         ],
     },
-    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, data-augmentation, image-augmentation, text-augmentation, mixup, cutout, random-erasing, computer-vision, nlp, deep-learning",
+    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, learning-rate, schedulers, step-lr, cosine-annealing, one-cycle, cyclic-lr, sgdr, warmup, optimization, training, deep-learning, pytorch, tensorflow",
     project_urls={
         "Bug Reports": "https://github.com/AliMehdi512/ilovetools/issues",
         "Source": "https://github.com/AliMehdi512/ilovetools",
