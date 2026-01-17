@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ilovetools"
-version = "0.2.28"
+version = "0.2.29"
 description = "A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -12,7 +12,7 @@ license = "MIT"
 authors = [
     {name = "Ali Mehdi", email = "ali.mehdi.dev579@gmail.com"}
 ]
-keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "data-augmentation", "image-augmentation", "text-augmentation", "mixup", "cutout", "random-erasing", "autoaugment", "randaugment", "albumentations", "computer-vision", "nlp", "deep-learning", "neural-networks", "training", "generalization", "overfitting"]
+keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "learning-rate", "schedulers", "step-lr", "exponential-lr", "cosine-annealing", "one-cycle", "cyclic-lr", "sgdr", "warm-restarts", "reduce-on-plateau", "polynomial-lr", "warmup", "multi-step-lr", "optimization", "training", "deep-learning", "neural-networks", "pytorch", "tensorflow", "keras", "convergence", "super-convergence", "adaptive-learning-rate"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
