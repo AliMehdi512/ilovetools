@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ilovetools"
-version = "0.2.30"
+version = "0.2.31"
 description = "A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -12,7 +12,7 @@ license = "MIT"
 authors = [
     {name = "Ali Mehdi", email = "ali.mehdi.dev579@gmail.com"}
 ]
-keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "pooling", "max-pooling", "average-pooling", "global-pooling", "adaptive-pooling", "maxpool2d", "avgpool2d", "global-max-pool", "global-avg-pool", "adaptive-max-pool", "adaptive-avg-pool", "cnn", "convolutional-neural-networks", "downsampling", "feature-extraction", "spatial-pooling", "deep-learning", "neural-networks", "pytorch", "tensorflow", "keras", "resnet", "mobilenet", "efficientnet", "computer-vision", "image-classification"]
+keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "convolution", "conv1d", "conv2d", "conv3d", "depthwise-convolution", "separable-convolution", "dilated-convolution", "atrous-convolution", "transposed-convolution", "deconvolution", "1x1-convolution", "pointwise-convolution", "cnn", "convolutional-neural-networks", "deep-learning", "neural-networks", "pytorch", "tensorflow", "keras", "mobilenet", "resnet", "unet", "inception", "xception", "efficientnet", "computer-vision", "image-classification", "semantic-segmentation", "object-detection"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
