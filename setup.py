@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.2.31",
+    version="0.2.32",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
@@ -58,7 +58,7 @@ setup(
             "soundfile>=0.12.0",
         ],
     },
-    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, convolution, conv1d, conv2d, conv3d, depthwise-convolution, separable-convolution, dilated-convolution, transposed-convolution, cnn, convolutional-neural-networks, deep-learning, pytorch, tensorflow, mobilenet, resnet, unet",
+    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, recurrent-neural-networks, rnn, lstm, gru, bilstm, bigru, sequence-modeling, nlp, time-series, speech-recognition, machine-translation, vanishing-gradient, long-short-term-memory, gated-recurrent-unit, bidirectional-rnn, deep-learning, pytorch, tensorflow, keras",
     project_urls={
         "Bug Reports": "https://github.com/AliMehdi512/ilovetools/issues",
         "Source": "https://github.com/AliMehdi512/ilovetools",
