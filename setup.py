@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.2.34",
+    version="0.2.35",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
@@ -58,7 +58,7 @@ setup(
             "soundfile>=0.12.0",
         ],
     },
-    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, graph-neural-networks, gnn, gcn, gat, graphsage, gin, message-passing, node-classification, link-prediction, graph-classification, social-networks, knowledge-graphs, molecular-graphs, drug-discovery, deep-learning, pytorch, tensorflow",
+    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, autoencoder, variational-autoencoder, vae, denoising-autoencoder, sparse-autoencoder, contractive-autoencoder, dimensionality-reduction, anomaly-detection, feature-learning, unsupervised-learning, generative-models, image-compression, deep-learning, pytorch, tensorflow",
     project_urls={
         "Bug Reports": "https://github.com/AliMehdi512/ilovetools/issues",
         "Source": "https://github.com/AliMehdi512/ilovetools",
