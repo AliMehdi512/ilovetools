@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ilovetools"
-version = "0.2.35"
+version = "0.2.36"
 description = "A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -12,7 +12,7 @@ license = "MIT"
 authors = [
     {name = "Ali Mehdi", email = "ali.mehdi.dev579@gmail.com"}
 ]
-keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "autoencoder", "variational-autoencoder", "vae", "denoising-autoencoder", "sparse-autoencoder", "contractive-autoencoder", "encoder-decoder", "latent-space", "bottleneck", "reconstruction-loss", "kl-divergence", "reparameterization-trick", "dimensionality-reduction", "anomaly-detection", "fraud-detection", "feature-learning", "unsupervised-learning", "generative-models", "image-compression", "image-denoising", "elbo", "probabilistic-models", "deep-learning", "neural-networks", "pytorch", "tensorflow", "keras"]
+keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "transfer-learning", "fine-tuning", "pretrained-models", "feature-extraction", "domain-adaptation", "imagenet", "bert", "gpt", "resnet", "vgg", "frozen-layers", "learning-rate-warmup", "discriminative-fine-tuning", "gradual-unfreezing", "layer-wise-learning-rates", "catastrophic-forgetting", "few-shot-learning", "zero-shot-learning", "model-adaptation", "knowledge-transfer", "deep-learning", "neural-networks", "pytorch", "tensorflow", "keras"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
