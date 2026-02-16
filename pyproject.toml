@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ilovetools"
-version = "0.2.37"
+version = "0.2.38"
 description = "A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -12,7 +12,7 @@ license = "MIT"
 authors = [
     {name = "Ali Mehdi", email = "ali.mehdi.dev579@gmail.com"}
 ]
-keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "object-detection", "yolo", "faster-rcnn", "ssd", "retinanet", "detr", "computer-vision", "bounding-boxes", "anchor-boxes", "region-proposals", "non-maximum-suppression", "nms", "intersection-over-union", "iou", "bounding-box-regression", "classification-head", "detection-head", "feature-pyramid-network", "fpn", "focal-loss", "two-stage-detector", "one-stage-detector", "real-time-detection", "map", "mean-average-precision", "autonomous-driving", "surveillance", "deep-learning", "neural-networks", "pytorch", "tensorflow"]
+keywords = ["utilities", "tools", "ai", "ml", "data-processing", "automation", "reinforcement-learning", "q-learning", "dqn", "deep-q-network", "policy-gradient", "reinforce", "actor-critic", "a3c", "ppo", "proximal-policy-optimization", "ddpg", "sac", "soft-actor-critic", "td-learning", "temporal-difference", "bellman-equation", "value-function", "policy-network", "exploration-exploitation", "epsilon-greedy", "reward-shaping", "experience-replay", "target-network", "advantage-function", "gae", "generalized-advantage-estimation", "trust-region", "trpo", "on-policy", "off-policy", "model-free", "markov-decision-process", "mdp", "deep-learning", "neural-networks", "pytorch", "tensorflow"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
