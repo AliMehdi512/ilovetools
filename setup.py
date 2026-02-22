@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.2.39",
+    version="0.2.40",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
@@ -58,7 +58,7 @@ setup(
             "soundfile>=0.12.0",
         ],
     },
-    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, attention-mechanisms, transformers, multi-head-attention, self-attention, cross-attention, positional-encoding, encoder-decoder, gpt, bert, vision-transformer, vit, clip, dall-e, whisper, nlp, natural-language-processing, computer-vision, deep-learning, pytorch, tensorflow",
+    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, cnn, convolutional-neural-networks, deep-learning, computer-vision, image-classification, object-detection, semantic-segmentation, lenet, alexnet, vgg, resnet, efficientnet, mobilenet, batch-normalization, pooling, convolution, depthwise-separable, imagenet, cifar10, mnist, pytorch, tensorflow, keras",
     project_urls={
         "Bug Reports": "https://github.com/AliMehdi512/ilovetools/issues",
         "Source": "https://github.com/AliMehdi512/ilovetools",
