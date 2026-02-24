@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.2.41",
+    version="0.2.42",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
@@ -58,7 +58,7 @@ setup(
             "soundfile>=0.12.0",
         ],
     },
-    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, gan, generative-adversarial-networks, dcgan, wgan, stylegan, biggan, conditional-gan, image-generation, deepfakes, super-resolution, image-to-image-translation, pix2pix, cyclegan, srgan, esrgan, deep-learning, generative-ai, computer-vision, pytorch, tensorflow, keras",
+    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, vae, variational-autoencoder, beta-vae, conditional-vae, vq-vae, cvae, generative-models, latent-space, elbo, kl-divergence, reparameterization-trick, disentangled-representations, anomaly-detection, semi-supervised-learning, image-generation, deep-learning, pytorch, tensorflow, keras",
     project_urls={
         "Bug Reports": "https://github.com/AliMehdi512/ilovetools/issues",
         "Source": "https://github.com/AliMehdi512/ilovetools",
