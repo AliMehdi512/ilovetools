@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="ilovetools",
-    version="0.2.43",
+    version="0.2.44",
     author="Ali Mehdi",
     author_email="ali.mehdi.dev579@gmail.com",
     description="A comprehensive Python utility library with modular tools for AI/ML, data processing, and daily programming needs",
@@ -58,7 +58,7 @@ setup(
             "soundfile>=0.12.0",
         ],
     },
-    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, diffusion-models, ddpm, ddim, stable-diffusion, dall-e, midjourney, text-to-image, image-generation, denoising, score-matching, langevin-dynamics, generative-ai, deep-learning, computer-vision, pytorch, tensorflow, keras",
+    keywords="utilities, tools, ai, ml, data-processing, automation, python-library, neural-networks, normalizing-flows, realnvp, glow, planar-flow, coupling-layer, invertible-neural-networks, exact-likelihood, density-estimation, generative-models, deep-learning, pytorch, tensorflow, keras",
     project_urls={
         "Bug Reports": "https://github.com/AliMehdi512/ilovetools/issues",
         "Source": "https://github.com/AliMehdi512/ilovetools",
