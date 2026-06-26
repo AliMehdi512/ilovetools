@@ -3,9 +3,9 @@ LLM helper utilities for working with language models
 """
 
 import re
-from typing import Union, List
+from typing import Union, List, Any, Dict
 
-__all__ = ['token_counter']
+__all__ = ['token_counter', 'parse_llm_json']
 
 
 def token_counter(
@@ -139,3 +139,83 @@ def token_counter(
         }
     
     return estimated_tokens
+
+def parse_llm_json(text: str, fallback_to_brackets: bool = True) -> Union[dict, list]:
+    """
+    Extract, clean, and robustly parse JSON objects or arrays from LLM response text.
+
+    Handles:
+        - Markdown code blocks (e.g. ```json ... ``` or ``` ... ```)
+        - Preceding or succeeding conversational text
+        - Single-line comments (//) and block comments (/* */)
+        - Trailing commas in objects or lists (which standard json.loads fails on)
+        - Control characters and unescaped newlines in strings
+
+    Args:
+        text: The raw LLM response text containing JSON.
+        fallback_to_brackets: If True, searches for the first '{' or '[' and last '}' or ']'
+                              if no markdown code blocks are found or if they fail to parse.
+
+    Returns:
+        The deserialized Python dictionary or list.
+
+    Raises:
+        ValueError: If no valid JSON structure is found or parsing fails.
+
+    Examples:
+        >>> parse_llm_json('Here is your data: ```json\\n{"name": "Ali", "age": 25,}\\n```')
+        {'name': 'Ali', 'age': 25}
+    """
+    import json
+    import re
+    if not isinstance(text, str):
+        raise TypeError("Input text must be a string")
+
+    cleaned = text.strip()
+
+    # 1. Try to extract from markdown code blocks
+    code_block_pattern = r"```(?:json)?\s*([\s\S]*?)\s*```"
+    match = re.search(code_block_pattern, cleaned, re.IGNORECASE)
+    if match:
+        candidate = match.group(1)
+        try:
+            return _clean_and_load(candidate)
+        except Exception:
+            pass
+
+    # 2. Bracket-matching search if no code blocks worked or existed
+    if fallback_to_brackets:
+        obj_match = re.search(r"(\{[\s\S]*\})", cleaned)
+        arr_match = re.search(r"(\[[\s\S]*\])", cleaned)
+
+        candidates = []
+        if obj_match:
+            candidates.append((obj_match.start(), obj_match.group(1)))
+        if arr_match:
+            candidates.append((arr_match.start(), arr_match.group(1)))
+
+        if candidates:
+            candidates.sort(key=lambda x: x[0])
+            for _, candidate in candidates:
+                try:
+                    return _clean_and_load(candidate)
+                except Exception:
+                    continue
+
+    # Last-ditch attempt on the whole text
+    return _clean_and_load(cleaned)
+
+def _clean_and_load(json_str: str) -> Any:
+    import json
+    import re
+    # Remove single-line comments starting with // but not http://
+    json_str = re.sub(r"(?<!:)//.*$", "", json_str, flags=re.MULTILINE)
+    # Remove block comments /* ... */
+    json_str = re.sub(r"/\*[\s\S]*?\*/", "", json_str)
+
+    json_str = json_str.strip()
+
+    # Remove trailing commas inside objects and lists
+    json_str = re.sub(r",\s*([\]}])", r"\1", json_str)
+
+    return json.loads(json_str)
