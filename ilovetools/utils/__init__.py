@@ -45,6 +45,20 @@ from .retry import (
     retry_with_circuit_breaker,
 )
 
+from .data_structures import (
+    deep_merge,
+    flatten_dict,
+    unflatten_dict,
+    deep_get,
+    deep_set,
+    deep_delete,
+    chunked,
+    deduplicate,
+    invert_dict,
+    group_by,
+    FrozenDict,
+)
+
 __all__ = [
     # Rate Limiter
     'TokenBucketLimiter',
@@ -81,4 +95,16 @@ __all__ = [
     'RetryStrategy',
     'CircuitBreaker',
     'retry_with_circuit_breaker',
+    # Data Structures
+    'deep_merge',
+    'flatten_dict',
+    'unflatten_dict',
+    'deep_get',
+    'deep_set',
+    'deep_delete',
+    'chunked',
+    'deduplicate',
+    'invert_dict',
+    'group_by',
+    'FrozenDict',
 ]
