@@ -59,6 +59,18 @@ from .data_structures import (
     FrozenDict,
 )
 
+from .patterns import (
+    Singleton,
+    Observer,
+    Strategy,
+    ChainOfResponsibility,
+    Command,
+    CommandHistory,
+    Registry,
+    Pipeline,
+    Builder,
+)
+
 __all__ = [
     # Rate Limiter
     'TokenBucketLimiter',
@@ -107,4 +119,14 @@ __all__ = [
     'invert_dict',
     'group_by',
     'FrozenDict',
+    # Design Patterns
+    'Singleton',
+    'Observer',
+    'Strategy',
+    'ChainOfResponsibility',
+    'Command',
+    'CommandHistory',
+    'Registry',
+    'Pipeline',
+    'Builder',
 ]
