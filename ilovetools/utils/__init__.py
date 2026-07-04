@@ -71,6 +71,17 @@ from .patterns import (
     Builder,
 )
 
+from .async_helpers import (
+    gather_with_limit,
+    async_map,
+    async_filter,
+    async_retry,
+    AsyncPool,
+    race,
+    async_timeout,
+    AsyncCache,
+)
+
 __all__ = [
     # Rate Limiter
     'TokenBucketLimiter',
@@ -129,4 +140,13 @@ __all__ = [
     'Registry',
     'Pipeline',
     'Builder',
+    # Async Helpers
+    'gather_with_limit',
+    'async_map',
+    'async_filter',
+    'async_retry',
+    'AsyncPool',
+    'race',
+    'async_timeout',
+    'AsyncCache',
 ]
