@@ -17,6 +17,16 @@ from .prompt_engineering import (
     MODEL_PRICING,
 )
 from .inference import *
+from .context_manager import (
+    ContextWindow,
+    ConversationBuffer,
+    ConversationSummaryBuffer,
+    trim_messages,
+    summarize_history,
+    allocate_token_budget,
+    count_message_tokens,
+    estimate_tokens,
+)
 
 __all__ = [
     'token_counter',
@@ -33,4 +43,13 @@ __all__ = [
     'format_chat_messages',
     'MODEL_CONTEXT_WINDOWS',
     'MODEL_PRICING',
+    # Context Manager
+    'ContextWindow',
+    'ConversationBuffer',
+    'ConversationSummaryBuffer',
+    'trim_messages',
+    'summarize_history',
+    'allocate_token_budget',
+    'count_message_tokens',
+    'estimate_tokens',
 ]
