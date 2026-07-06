@@ -2,8 +2,8 @@
 ilovetools - A comprehensive Python utility library
 """
 
-__version__ = "0.2.54"
-# release marker: 0.2.54
+__version__ = "0.2.55"
+# release marker: 0.2.55
 __author__ = "Ali Mehdi"
 __email__ = "ali.mehdi.dev579@gmail.com"
 
@@ -23,6 +23,7 @@ from . import validation
 from . import conversion
 from . import automation
 from . import utils
+from . import skills
 
 __all__ = [
     "ai",
@@ -40,4 +41,5 @@ __all__ = [
     "conversion",
     "automation",
     "utils",
+    "skills",
 ]
