@@ -40,6 +40,7 @@ from . import karpathy_skills
 from . import anthropic_skills
 from . import agent_skills
 from . import prompt_engineering_skills
+from . import community_skills
 
 # Build the unified skill registry from all sub-modules
 _SKILL_REGISTRY = {}
@@ -47,6 +48,7 @@ _SKILL_REGISTRY.update(karpathy_skills.SKILLS)
 _SKILL_REGISTRY.update(anthropic_skills.SKILLS)
 _SKILL_REGISTRY.update(agent_skills.SKILLS)
 _SKILL_REGISTRY.update(prompt_engineering_skills.SKILLS)
+_SKILL_REGISTRY.update(community_skills.SKILLS)
 
 
 def list_skills():
@@ -190,6 +192,26 @@ def skill_info():
             "source": "codejunkie99/prompting-skill (MIT)",
             "description": "Production-grade prompt structure template.",
         },
+        "voltagent_awesome_skills": {
+            "source": "VoltAgent/awesome-agent-skills (MIT)",
+            "description": "1,000+ curated agent skills from Anthropic, Google, Vercel, Stripe, and more.",
+        },
+        "claude_community_skills": {
+            "source": "alirezarezvani/claude-skills (MIT)",
+            "description": "345+ Claude Code skills across 18 categories (marketing, engineering, DevOps, etc.).",
+        },
+        "luokai_mega_collection": {
+            "source": "luokai0/ai-agent-skills-by-luo-kai",
+            "description": "8,966+ skill files across 21 domains — world's largest agent skills collection.",
+        },
+        "seb1n_universal_skills": {
+            "source": "seb1n/awesome-ai-agent-skills",
+            "description": "90+ self-contained universal SKILL.md skills for autonomous agents.",
+        },
+        "mouadja_categorized_skills": {
+            "source": "mouadja02/skills",
+            "description": "716 agent skills across 31 categories with YAML frontmatter.",
+        },
     }
 
 
@@ -198,6 +220,7 @@ __all__ = [
     "anthropic_skills",
     "agent_skills",
     "prompt_engineering_skills",
+    "community_skills",
     "list_skills",
     "get_skill",
     "skill_info",

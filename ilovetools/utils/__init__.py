@@ -82,6 +82,21 @@ from .async_helpers import (
     AsyncCache,
 )
 
+from .json_utils import (
+    extract_json,
+    repair_json,
+    safe_json_loads,
+    merge_json,
+    diff_json,
+    flatten_json,
+    unflatten_json,
+    json_path_get,
+    json_path_set,
+    validate_json_schema,
+    redact_json_keys,
+    json_size,
+)
+
 __all__ = [
     # Rate Limiter
     'TokenBucketLimiter',
@@ -149,4 +164,17 @@ __all__ = [
     'race',
     'async_timeout',
     'AsyncCache',
+    # JSON Utils
+    'extract_json',
+    'repair_json',
+    'safe_json_loads',
+    'merge_json',
+    'diff_json',
+    'flatten_json',
+    'unflatten_json',
+    'json_path_get',
+    'json_path_set',
+    'validate_json_schema',
+    'redact_json_keys',
+    'json_size',
 ]
