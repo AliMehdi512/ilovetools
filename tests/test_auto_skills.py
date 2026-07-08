@@ -13,6 +13,7 @@ from ilovetools.skills import (
     agent_skills,
     prompt_engineering_skills,
     community_skills,
+    microsoft_skills,
 )
 
 
@@ -46,6 +47,12 @@ class TestSkillModulesImport:
         assert hasattr(community_skills, "SKILLS")
         assert isinstance(community_skills.SKILLS, dict)
         assert len(community_skills.SKILLS) >= 5
+
+    def test_microsoft_skills_importable(self):
+        assert microsoft_skills is not None
+        assert hasattr(microsoft_skills, "SKILLS")
+        assert isinstance(microsoft_skills.SKILLS, dict)
+        assert len(microsoft_skills.SKILLS) >= 4
 
 
 class TestListSkills:
@@ -86,6 +93,10 @@ class TestListSkills:
             "luokai_mega_collection",
             "seb1n_universal_skills",
             "mouadja_categorized_skills",
+            "microsoft_azure_skills",
+            "microsoft_foundry_skills",
+            "microsoft_agents_template",
+            "microsoft_mcp_config",
         ]
         for skill in expected:
             assert skill in names, f"Missing skill: {skill}"
@@ -96,6 +107,9 @@ class TestListSkills:
     def test_no_duplicates(self):
         names = list_skills()
         assert len(names) == len(set(names))
+
+    def test_at_least_24_skills(self):
+        assert len(list_skills()) >= 24
 
 
 class TestGetSkill:
@@ -121,6 +135,10 @@ class TestGetSkill:
         "luokai_mega_collection",
         "seb1n_universal_skills",
         "mouadja_categorized_skills",
+        "microsoft_azure_skills",
+        "microsoft_foundry_skills",
+        "microsoft_agents_template",
+        "microsoft_mcp_config",
     ])
     def test_get_skill_returns_nonempty_string(self, skill_name):
         result = get_skill(skill_name)
@@ -150,6 +168,10 @@ class TestGetSkill:
         assert "domain" in get_skill("luokai_mega_collection").lower()
         assert "universal" in get_skill("seb1n_universal_skills").lower()
         assert "category" in get_skill("mouadja_categorized_skills").lower()
+        assert "Azure" in get_skill("microsoft_azure_skills")
+        assert "Foundry" in get_skill("microsoft_foundry_skills")
+        assert "AGENTS.md" in get_skill("microsoft_agents_template")
+        assert "MCP" in get_skill("microsoft_mcp_config")
 
     def test_get_skill_consistent_with_list(self):
         for name in list_skills():

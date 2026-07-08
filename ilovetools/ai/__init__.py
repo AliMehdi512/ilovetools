@@ -27,6 +27,13 @@ from .context_manager import (
     count_message_tokens,
     estimate_tokens,
 )
+from .tool_registry import (
+    ToolRegistry,
+    Tool,
+    tool,
+    ToolError,
+    ToolResult,
+)
 
 __all__ = [
     'token_counter',
@@ -52,4 +59,10 @@ __all__ = [
     'allocate_token_budget',
     'count_message_tokens',
     'estimate_tokens',
+    # Tool Registry
+    'ToolRegistry',
+    'Tool',
+    'tool',
+    'ToolError',
+    'ToolResult',
 ]

@@ -41,6 +41,7 @@ from . import anthropic_skills
 from . import agent_skills
 from . import prompt_engineering_skills
 from . import community_skills
+from . import microsoft_skills
 
 # Build the unified skill registry from all sub-modules
 _SKILL_REGISTRY = {}
@@ -49,6 +50,7 @@ _SKILL_REGISTRY.update(anthropic_skills.SKILLS)
 _SKILL_REGISTRY.update(agent_skills.SKILLS)
 _SKILL_REGISTRY.update(prompt_engineering_skills.SKILLS)
 _SKILL_REGISTRY.update(community_skills.SKILLS)
+_SKILL_REGISTRY.update(microsoft_skills.SKILLS)
 
 
 def list_skills():
@@ -212,6 +214,22 @@ def skill_info():
             "source": "mouadja02/skills",
             "description": "716 agent skills across 31 categories with YAML frontmatter.",
         },
+        "microsoft_azure_skills": {
+            "source": "microsoft/agent-skills (MIT)",
+            "description": "174+ Azure SDK skills: deploy, validate, diagnose, cost-manage.",
+        },
+        "microsoft_foundry_skills": {
+            "source": "microsoft/agent-skills (MIT)",
+            "description": "Microsoft Foundry hosted agent infrastructure and orchestration.",
+        },
+        "microsoft_agents_template": {
+            "source": "microsoft/agent-skills (MIT)",
+            "description": "AGENTS.md template for project-level agent configuration.",
+        },
+        "microsoft_mcp_config": {
+            "source": "microsoft/agent-skills (MIT)",
+            "description": "Azure and Foundry MCP endpoint configurations.",
+        },
     }
 
 
@@ -221,6 +239,7 @@ __all__ = [
     "agent_skills",
     "prompt_engineering_skills",
     "community_skills",
+    "microsoft_skills",
     "list_skills",
     "get_skill",
     "skill_info",
