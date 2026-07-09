@@ -97,6 +97,24 @@ from .json_utils import (
     json_size,
 )
 
+from .hash_utils import (
+    hash_string,
+    hash_bytes,
+    hash_multiple,
+    hash_file,
+    hash_directory,
+    hash_files,
+    hmac_digest,
+    verify_hash,
+    verify_file,
+    identify_algorithm,
+    find_duplicates,
+    deduplicate_by_hash,
+    short_hash,
+    DEFAULT_ALGORITHM as HASH_DEFAULT_ALGORITHM,
+    SUPPORTED_ALGORITHMS as HASH_SUPPORTED_ALGORITHMS,
+)
+
 __all__ = [
     # Rate Limiter
     'TokenBucketLimiter',
@@ -177,4 +195,20 @@ __all__ = [
     'validate_json_schema',
     'redact_json_keys',
     'json_size',
+    # Hash Utils
+    'hash_string',
+    'hash_bytes',
+    'hash_multiple',
+    'hash_file',
+    'hash_directory',
+    'hash_files',
+    'hmac_digest',
+    'verify_hash',
+    'verify_file',
+    'identify_algorithm',
+    'find_duplicates',
+    'deduplicate_by_hash',
+    'short_hash',
+    'HASH_DEFAULT_ALGORITHM',
+    'HASH_SUPPORTED_ALGORITHMS',
 ]

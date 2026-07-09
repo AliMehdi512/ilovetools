@@ -14,6 +14,8 @@ from ilovetools.skills import (
     prompt_engineering_skills,
     community_skills,
     microsoft_skills,
+    openai_skills,
+    awesome_agent_skills,
 )
 
 
@@ -53,6 +55,18 @@ class TestSkillModulesImport:
         assert hasattr(microsoft_skills, "SKILLS")
         assert isinstance(microsoft_skills.SKILLS, dict)
         assert len(microsoft_skills.SKILLS) >= 4
+
+    def test_openai_skills_importable(self):
+        assert openai_skills is not None
+        assert hasattr(openai_skills, "SKILLS")
+        assert isinstance(openai_skills.SKILLS, dict)
+        assert len(openai_skills.SKILLS) >= 5
+
+    def test_awesome_agent_skills_importable(self):
+        assert awesome_agent_skills is not None
+        assert hasattr(awesome_agent_skills, "SKILLS")
+        assert isinstance(awesome_agent_skills.SKILLS, dict)
+        assert len(awesome_agent_skills.SKILLS) >= 6
 
 
 class TestListSkills:
@@ -211,3 +225,75 @@ class TestSkillsFromRootImport:
         import ilovetools
         names = ilovetools.skills.list_skills()
         assert len(names) >= 10
+
+
+class TestNewSkillContent:
+    """Test content of newly added openai_skills and awesome_agent_skills."""
+
+    def test_openai_codex_skills_content(self):
+        text = get_skill("openai_codex_skills")
+        assert "Codex" in text
+        assert "skill" in text.lower()
+
+    def test_openai_plugin_guide_content(self):
+        text = get_skill("openai_plugin_guide")
+        assert "plugin" in text.lower()
+        assert "skill" in text.lower()
+
+    def test_openai_agent_skills_spec_content(self):
+        text = get_skill("openai_agent_skills_spec")
+        assert "SKILL.md" in text
+        assert "frontmatter" in text.lower()
+
+    def test_openai_code_review_content(self):
+        text = get_skill("openai_code_review_skill")
+        assert "review" in text.lower()
+        assert "security" in text.lower()
+
+    def test_openai_testing_skill_content(self):
+        text = get_skill("openai_testing_skill")
+        assert "pytest" in text.lower()
+        assert "test" in text.lower()
+
+    def test_openai_debugging_skill_content(self):
+        text = get_skill("openai_debugging_skill")
+        assert "debug" in text.lower()
+        assert "traceback" in text.lower()
+
+    def test_awesome_git_workflow_content(self):
+        text = get_skill("awesome_git_workflow")
+        assert "Git" in text
+        assert "commit" in text.lower()
+
+    def test_awesome_refactoring_content(self):
+        text = get_skill("awesome_refactoring")
+        assert "refactor" in text.lower()
+
+    def test_awesome_api_design_content(self):
+        text = get_skill("awesome_api_design")
+        assert "REST" in text or "API" in text
+
+    def test_awesome_error_handling_content(self):
+        text = get_skill("awesome_error_handling")
+        assert "error" in text.lower()
+        assert "exception" in text.lower()
+
+    def test_awesome_doc_generation_content(self):
+        text = get_skill("awesome_doc_generation")
+        assert "doc" in text.lower()
+
+    def test_awesome_performance_profiling_content(self):
+        text = get_skill("awesome_performance_profiling")
+        assert "profil" in text.lower() or "performance" in text.lower()
+
+    def test_new_skills_in_skill_info(self):
+        info = skill_info()
+        for name in ["openai_codex_skills", "awesome_git_workflow"]:
+            assert name in info
+            assert "source" in info[name]
+            assert "description" in info[name]
+
+    def test_new_skills_count_increase(self):
+        """Total skills should now be significantly more than the original set."""
+        names = list_skills()
+        assert len(names) >= 30

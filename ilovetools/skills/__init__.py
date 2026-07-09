@@ -42,6 +42,8 @@ from . import agent_skills
 from . import prompt_engineering_skills
 from . import community_skills
 from . import microsoft_skills
+from . import openai_skills
+from . import awesome_agent_skills
 
 # Build the unified skill registry from all sub-modules
 _SKILL_REGISTRY = {}
@@ -51,6 +53,8 @@ _SKILL_REGISTRY.update(agent_skills.SKILLS)
 _SKILL_REGISTRY.update(prompt_engineering_skills.SKILLS)
 _SKILL_REGISTRY.update(community_skills.SKILLS)
 _SKILL_REGISTRY.update(microsoft_skills.SKILLS)
+_SKILL_REGISTRY.update(openai_skills.SKILLS)
+_SKILL_REGISTRY.update(awesome_agent_skills.SKILLS)
 
 
 def list_skills():
@@ -230,6 +234,56 @@ def skill_info():
             "source": "microsoft/agent-skills (MIT)",
             "description": "Azure and Foundry MCP endpoint configurations.",
         },
+        # --- openai_skills ---
+        "openai_codex_skills": {
+            "source": "openai/skills (MIT, ~23k stars)",
+            "description": "Overview of the Codex agent skill catalog (.system, .curated, .experimental).",
+        },
+        "openai_plugin_guide": {
+            "source": "OpenAI Plugins repo (MIT)",
+            "description": "How to build, package, and distribute skill-only plugins for Codex.",
+        },
+        "openai_agent_skills_spec": {
+            "source": "agentskills.io / OpenAI / Anthropic (MIT)",
+            "description": "The Agent Skills standard: SKILL.md format, YAML frontmatter, discovery rules.",
+        },
+        "openai_code_review_skill": {
+            "source": "openai/skills .curated (MIT)",
+            "description": "Systematic code-review checklist for PR analysis (style, logic, security, perf, tests, docs).",
+        },
+        "openai_testing_skill": {
+            "source": "openai/skills .curated (MIT)",
+            "description": "Test generation, execution, and coverage analysis workflow using pytest.",
+        },
+        "openai_debugging_skill": {
+            "source": "openai/skills .curated + community (MIT)",
+            "description": "Structured debugging workflow: reproduce, read traceback, hypothesize, verify, fix, test.",
+        },
+        # --- awesome_agent_skills ---
+        "awesome_git_workflow": {
+            "source": "addyosmani/agent-skills (MIT)",
+            "description": "Git branching, conventional commits, and PR workflow guidelines.",
+        },
+        "awesome_refactoring": {
+            "source": "addyosmani/agent-skills + VoltAgent/awesome-agent-skills (MIT)",
+            "description": "Safe refactoring patterns: extract function/class, polymorphism, parameter objects.",
+        },
+        "awesome_api_design": {
+            "source": "VoltAgent/awesome-agent-skills (MIT)",
+            "description": "REST and GraphQL API design: naming, methods, status codes, versioning, security.",
+        },
+        "awesome_error_handling": {
+            "source": "addyosmani/agent-skills + alirezarezvani/claude-skills (MIT)",
+            "description": "Error handling patterns: specific catching, custom exceptions, context managers, retry.",
+        },
+        "awesome_doc_generation": {
+            "source": "VoltAgent/awesome-agent-skills + mouadja02/skills (MIT)",
+            "description": "Documentation generation: docstrings, README, API reference, changelog standards.",
+        },
+        "awesome_performance_profiling": {
+            "source": "addyosmani/agent-skills + community (MIT)",
+            "description": "Profiling workflow, tools (cProfile, line_profiler), and common optimizations.",
+        },
     }
 
 
@@ -240,6 +294,8 @@ __all__ = [
     "prompt_engineering_skills",
     "community_skills",
     "microsoft_skills",
+    "openai_skills",
+    "awesome_agent_skills",
     "list_skills",
     "get_skill",
     "skill_info",
